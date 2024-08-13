@@ -2,6 +2,7 @@ package api
 
 import (
 	"api-gateway/api/handler"
+	"api-gateway/api/middleware"
 	"api-gateway/config"
 	"api-gateway/queue/kafka/producer"
 	"api-gateway/queue/rabbitmq/producermq"
@@ -60,7 +61,7 @@ func (c *controllerImpl) SetupRoutes(service service.ServiceManager, kafkaProduc
 
 	c.router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	// c.router.Use(middleware.IsAuthenticated(service.User()))
+	c.router.Use(middleware.IsAuthenticated(service.User()))
 	router := c.router.Group("/api/v1")
 
 	// User routes
@@ -111,9 +112,9 @@ func (c *controllerImpl) SetupRoutes(service service.ServiceManager, kafkaProduc
 	goal := router.Group("/goals")
 	{
 		goal.POST("/", h.BudgetHandler().CreateGoalsHandler)
-        goal.GET("/:id", h.BudgetHandler().GetGoalHandler)
-        goal.PUT("/:id", h.BudgetHandler().UpdateGoalHandler)
-        goal.DELETE("/:id", h.BudgetHandler().DeleteGoalHandler)
-        goal.GET("/", h.BudgetHandler().GetGoalsListHandler)
+		goal.GET("/:id", h.BudgetHandler().GetGoalHandler)
+		goal.PUT("/:id", h.BudgetHandler().UpdateGoalHandler)
+		goal.DELETE("/:id", h.BudgetHandler().DeleteGoalHandler)
+		goal.GET("/", h.BudgetHandler().GetGoalsListHandler)
 	}
 }

@@ -57,13 +57,13 @@ func (h *budgettingHandlerImpl) CreateAccountHandler(ctx *gin.Context) {
 // @Failure 500 {object} models.ErrorResponse
 // @Router /accounts/{id} [get]
 func (h *budgettingHandlerImpl) GetAccountHandler(ctx *gin.Context) {
-	val, err := ctx.Cookie("claims")
-	if err != nil {
-		h.logger.Error("Missing token claims", "error", err)
+	val, exists := ctx.Get("claims")
+	if !exists {
+		h.logger.Error("Missing token claims")
 		ctx.JSON(400, models.ErrorResponse{
 			Status:  400,
 			Message: "Missing token claims",
-			Error:   err.Error(),
+			Error:   "Missing token claims",
 		})
 		return
 	}
@@ -148,13 +148,13 @@ func (h *budgettingHandlerImpl) UpdateAccountHandler(ctx *gin.Context) {
 // @failure 500 {object} models.ErrorResponse
 // @Router /accounts/{id} [delete]
 func (h *budgettingHandlerImpl) DeleteAccountHandler(ctx *gin.Context) {
-	val, err := ctx.Cookie("claims")
-	if err != nil {
-		h.logger.Error("Missing token claims", "error", err)
+	val, exists := ctx.Get("claims")
+	if !exists {
+		h.logger.Error("Missing token claims")
 		ctx.JSON(400, models.ErrorResponse{
 			Status:  400,
 			Message: "Missing token claims",
-			Error:   err.Error(),
+			Error:   "Missing token claims",
 		})
 		return
 	}

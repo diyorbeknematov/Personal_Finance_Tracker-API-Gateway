@@ -4,6 +4,7 @@ import (
 	"api-gateway/api/token"
 	pb "api-gateway/generated/budgeting"
 	"api-gateway/models"
+	"encoding/json"
 
 	"github.com/gin-gonic/gin"
 )
@@ -76,7 +77,7 @@ func (h *budgettingHandlerImpl) GetBudgetHandler(ctx *gin.Context) {
 // @Produce json
 // @param id path string true "budget id"
 // @param budget body budgeting.UpdateBudgetReq true "budget"
-// @Success 200 {object} budgeting.UpdateBudgetResp
+// @Success 200 {object} models.Response
 // @Failure 404 {object} map[string]interface{}
 // @Failure 400 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
@@ -93,17 +94,38 @@ func (h *budgettingHandlerImpl) UpdateBudgetHandler(ctx *gin.Context) {
 	}
 
 	budget.Id = ctx.Param("id")
-	resp, err := h.budgetManagement.UpdateBudget(ctx, &budget)
+	// resp, err := h.budgetManagement.UpdateBudget(ctx, &budget)
+	// if err != nil {
+	// 	ctx.JSON(500, models.ErrorResponse{
+	// 		Status:  500,
+	// 		Message: "Internal Server Error",
+	// 		Error:   err.Error(),
+	// 	})
+	// 	return
+	// }
+	data, err := json.Marshal(&budget)
 	if err != nil {
-		ctx.JSON(500, models.ErrorResponse{
-			Status:  500,
-			Message: "Internal Server Error",
-			Error:   err.Error(),
-		})
-		return
+		h.logger.Error("Failed to marshal budget", "error", err)
+		ctx.JSON(400, models.ErrorResponse{
+            Status:  400,
+            Message: "Invalid request body",
+            Error:   err.Error(),
+        })
+	}	
+	err = h.producer.ProducerMessage("budgets", data)
+	if err != nil {
+		h.logger.Error("Failed to produce message", "error", err)
+        ctx.JSON(500, models.ErrorResponse{
+            Status:  500,
+            Message: "Internal Server Error",
+            Error:   err.Error(),
+        })
+        return
 	}
-
-	ctx.JSON(200, resp)
+	ctx.JSON(200, models.Response{
+		Status: "success",
+        Message: "Budget updated successfully",
+	})
 }
 
 // @summary delete budget
@@ -118,16 +140,15 @@ func (h *budgettingHandlerImpl) UpdateBudgetHandler(ctx *gin.Context) {
 // @Failure 500 {object} models.ErrorResponse
 // @router /budgets/{id} [delete]
 func (h *budgettingHandlerImpl) DeleteBudgetHandler(ctx *gin.Context) {
-	val, err := ctx.Cookie("claims")
-	if err != nil {
-		{
-			ctx.JSON(400, models.ErrorResponse{
-				Status:  400,
-				Message: "Missing token claims",
-				Error:   err.Error(),
-			})
-			return
-		}
+	val, exists := ctx.Get("claims")
+	if !exists {
+		h.logger.Error("Missing token claims")
+		ctx.JSON(400, models.ErrorResponse{
+			Status:  400,
+			Message: "Missing token claims",
+			Error:   "Missing token claims",
+		})
+		return
 	}
 	claims, err := token.TokenClaimsParse(val)
 	if err != nil {

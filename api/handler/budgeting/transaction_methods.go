@@ -4,6 +4,7 @@ import (
 	"api-gateway/api/token"
 	pb "api-gateway/generated/budgeting"
 	"api-gateway/models"
+	"encoding/json"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,7 +16,7 @@ import (
 // @Accept json
 // @produce json
 // @param transaction body budgeting.CreateTransactionReq true "transaction"
-// @Success 200 {object} budgeting.CreateTransactionResp
+// @Success 200 {object} models.Response
 // @failure 400 {object} models.ErrorResponse
 // @failure 500 {object} models.ErrorResponse
 // @failure 404 {object} map[string]interface{}
@@ -32,9 +33,29 @@ func (h *budgettingHandlerImpl) CreateTransactionHandler(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := h.financeManagement.CreateTransaction(ctx, &transaction)
+	// resp, err := h.financeManagement.CreateTransaction(ctx, &transaction)
+	// if err != nil {
+	// 	h.logger.Error("Internal Server Error", "error", err)
+	// 	ctx.JSON(500, models.ErrorResponse{
+	// 		Status:  500,
+	// 		Message: "Internal Server Error",
+	// 		Error:   err.Error(),
+	// 	})
+	// 	return
+	// }
+	data, err := json.Marshal(&transaction)
 	if err != nil {
-		h.logger.Error("Internal Server Error", "error", err)
+		h.logger.Error("Failed to marshal transaction", "error", err)
+		ctx.JSON(400, models.ErrorResponse{
+			Status:  400,
+			Message: "Invalid request body",
+			Error:   err.Error(),
+		})
+		return
+	}
+	err = h.producer.ProducerMessage("transactions", data)
+	if err != nil {
+		h.logger.Error("Failed to produce message", "error", err)
 		ctx.JSON(500, models.ErrorResponse{
 			Status:  500,
 			Message: "Internal Server Error",
@@ -43,7 +64,10 @@ func (h *budgettingHandlerImpl) CreateTransactionHandler(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, resp)
+	ctx.JSON(http.StatusOK, models.Response{
+		Message: "Transaction created successfully",
+		Status: "success",
+	})
 }
 
 // @summary get transaction
@@ -58,13 +82,13 @@ func (h *budgettingHandlerImpl) CreateTransactionHandler(ctx *gin.Context) {
 // @failure 500 {object} models.ErrorResponse
 // @router /transactions/{id} [get]
 func (h *budgettingHandlerImpl) GetTransactionHandler(ctx *gin.Context) {
-	val, err := ctx.Cookie("claims")
-	if err != nil {
-		h.logger.Error("Missing token claims", "error", err)
+	val, exists := ctx.Get("claims")
+	if !exists {
+		h.logger.Error("Missing token claims")
 		ctx.JSON(400, models.ErrorResponse{
 			Status:  400,
 			Message: "Missing token claims",
-			Error:   err.Error(),
+			Error:   "Missing token claims",
 		})
 		return
 	}
@@ -146,13 +170,13 @@ func (h *budgettingHandlerImpl) UpdateTransactionHandler(ctx *gin.Context) {
 // @failure 404 {object} map[string]interface{}
 // @router /transactions/{id} [delete]
 func (h *budgettingHandlerImpl) DeleteTransactionHandler(ctx *gin.Context) {
-	val, err := ctx.Cookie("claims")
-	if err != nil {
-		h.logger.Error("Missing token claims", "error", err)
+	val, exists := ctx.Get("claims")
+	if !exists {
+		h.logger.Error("Missing token claims")
 		ctx.JSON(400, models.ErrorResponse{
 			Status:  400,
 			Message: "Missing token claims",
-			Error:   err.Error(),
+			Error:   "Missing token claims",
 		})
 		return
 	}

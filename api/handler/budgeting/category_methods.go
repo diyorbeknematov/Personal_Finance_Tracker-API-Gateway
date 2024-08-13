@@ -108,15 +108,15 @@ func (h *budgettingHandlerImpl) UpdateCategoryHandler(ctx *gin.Context) {
 // @failure 500 {object} models.ErrorResponse
 // @router /categories/{id} [delete]
 func (h *budgettingHandlerImpl) DeleteCategoryHandler(ctx *gin.Context) {
-	val, err := ctx.Cookie("claims")
-	if err != nil {
-		h.logger.Error("Missing token claims", "error", err)
-        ctx.JSON(400, models.ErrorResponse{
-            Status:  400,
-            Message: "Missing token claims",
-            Error:   err.Error(),
-        })
-        return
+	val, exists := ctx.Get("claims")
+	if !exists {
+		h.logger.Error("Missing token claims")
+		ctx.JSON(400, models.ErrorResponse{
+			Status:  400,
+			Message: "Missing token claims",
+			Error:   "Missing token claims",
+		})
+		return
 	}
 	claims, err := token.TokenClaimsParse(val)
 	if err!= nil {

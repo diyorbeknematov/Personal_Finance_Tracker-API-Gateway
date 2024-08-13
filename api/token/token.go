@@ -11,12 +11,13 @@ type Claims struct {
 }
 
 func TokenClaimsParse(val any) (*Claims, error) {
-	claims, ok := val.(*Claims)
+	claims, ok := val.(Claims)
+	
 	if !ok {
 		return nil, fmt.Errorf("cannot parse token claims")
 	}
 
-	return claims, nil
+	return &claims, nil
 }
 
 func (tc *Claims) GetId() string {

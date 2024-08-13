@@ -4,7 +4,6 @@ import (
 	"api-gateway/api/token"
 	"api-gateway/generated/user"
 	"context"
-	"fmt"
 	"log"
 	"log/slog"
 	"net/http"
@@ -15,7 +14,6 @@ import (
 
 func IsAuthenticated(auth user.AuthServiceClient) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		fmt.Println("salom nima gap")
 		tokenString, err := c.Cookie("access_token")
 		if err != nil {
 			c.AbortWithStatusJSON(401, gin.H{"error": "Missing access token"})
@@ -34,13 +32,12 @@ func IsAuthenticated(auth user.AuthServiceClient) gin.HandlerFunc {
 			c.AbortWithStatusJSON(403, gin.H{"error": "Invalid access token"})
 			return
 		}
-
-		c.Set("claims", token.Claims{
+		claims := token.Claims{
 			Id:    resp.UserId,
 			Email: resp.Email,
 			Role:  resp.Role,
-		})
-		fmt.Println("tugadi")
+		}
+		c.Set("claims", claims)
 		c.Next()
 	}
 }

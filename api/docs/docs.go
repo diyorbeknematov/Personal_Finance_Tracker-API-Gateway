@@ -484,7 +484,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/budgeting.UpdateBudgetResp"
+                            "$ref": "#/definitions/models.Response"
                         }
                     },
                     "400": {
@@ -1194,7 +1194,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/budgeting.CreateTransactionResp"
+                            "$ref": "#/definitions/models.Response"
                         }
                     },
                     "400": {
@@ -1623,27 +1623,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "type": {
-                    "$ref": "#/definitions/budgeting.AccountType"
+                    "type": "string"
                 },
                 "user_id": {
                     "type": "string"
                 }
             }
-        },
-        "budgeting.AccountType": {
-            "type": "integer",
-            "enum": [
-                0,
-                1,
-                2,
-                3
-            ],
-            "x-enum-varnames": [
-                "AccountType_CHECKING",
-                "AccountType_SAVINGS",
-                "AccountType_CREDIT_CARD",
-                "AccountType_CASH"
-            ]
         },
         "budgeting.Budget": {
             "type": "object",
@@ -1661,7 +1646,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "period": {
-                    "$ref": "#/definitions/budgeting.Period"
+                    "type": "string"
                 },
                 "start_date": {
                     "type": "string"
@@ -1681,23 +1666,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "type": {
-                    "$ref": "#/definitions/budgeting.CategoryType"
+                    "type": "string"
                 },
                 "user_id": {
                     "type": "string"
                 }
             }
-        },
-        "budgeting.CategoryType": {
-            "type": "integer",
-            "enum": [
-                0,
-                1
-            ],
-            "x-enum-varnames": [
-                "CategoryType_INCOME",
-                "CategoryType_EXPENSE"
-            ]
         },
         "budgeting.CreateAccountReq": {
             "type": "object",
@@ -1712,7 +1686,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "type": {
-                    "$ref": "#/definitions/budgeting.AccountType"
+                    "type": "string"
                 },
                 "user_id": {
                     "type": "string"
@@ -1743,7 +1717,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "period": {
-                    "$ref": "#/definitions/budgeting.Period"
+                    "type": "string"
                 },
                 "start_date": {
                     "type": "string"
@@ -1771,7 +1745,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "type": {
-                    "$ref": "#/definitions/budgeting.CategoryType"
+                    "type": "string"
                 },
                 "user_id": {
                     "type": "string"
@@ -1802,7 +1776,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "$ref": "#/definitions/budgeting.Status"
+                    "type": "string"
                 },
                 "target_amount": {
                     "type": "number"
@@ -1845,20 +1819,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "type": {
-                    "$ref": "#/definitions/budgeting.TypeTrnsaction"
+                    "type": "string"
                 },
                 "user_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "budgeting.CreateTransactionResp": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string"
-                },
-                "status": {
                     "type": "string"
                 }
             }
@@ -1934,7 +1897,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "type": {
-                    "$ref": "#/definitions/budgeting.AccountType"
+                    "type": "string"
                 },
                 "user_id": {
                     "type": "string"
@@ -1977,7 +1940,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "period": {
-                    "$ref": "#/definitions/budgeting.Period"
+                    "type": "string"
                 },
                 "start_date": {
                     "type": "string"
@@ -2037,7 +2000,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "type": {
-                    "$ref": "#/definitions/budgeting.CategoryType"
+                    "type": "string"
                 },
                 "user_id": {
                     "type": "string"
@@ -2060,7 +2023,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "$ref": "#/definitions/budgeting.Status"
+                    "type": "string"
                 },
                 "target_amount": {
                     "type": "number"
@@ -2112,7 +2075,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "type": {
-                    "$ref": "#/definitions/budgeting.TypeTrnsaction"
+                    "type": "string"
                 },
                 "user_id": {
                     "type": "string"
@@ -2155,7 +2118,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "$ref": "#/definitions/budgeting.Status"
+                    "type": "string"
                 },
                 "target_amount": {
                     "type": "number"
@@ -2164,34 +2127,6 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
-        },
-        "budgeting.Period": {
-            "type": "integer",
-            "enum": [
-                0,
-                1,
-                2,
-                3
-            ],
-            "x-enum-varnames": [
-                "Period_DAILY",
-                "Period_WEEKLY",
-                "Period_MONTHLY",
-                "Period_YEARLY"
-            ]
-        },
-        "budgeting.Status": {
-            "type": "integer",
-            "enum": [
-                0,
-                1,
-                2
-            ],
-            "x-enum-varnames": [
-                "Status_INPORGRESS",
-                "Status_ACHIEVED",
-                "Status_FAILED"
-            ]
         },
         "budgeting.Transaction": {
             "type": "object",
@@ -2215,23 +2150,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "type": {
-                    "$ref": "#/definitions/budgeting.TypeTrnsaction"
+                    "type": "string"
                 },
                 "user_id": {
                     "type": "string"
                 }
             }
-        },
-        "budgeting.TypeTrnsaction": {
-            "type": "integer",
-            "enum": [
-                0,
-                1
-            ],
-            "x-enum-varnames": [
-                "TypeTrnsaction_INCOME",
-                "TypeTrnsaction_EXPENSE"
-            ]
         },
         "budgeting.UpdateAccountReq": {
             "type": "object",
@@ -2249,7 +2173,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "type": {
-                    "$ref": "#/definitions/budgeting.AccountType"
+                    "type": "string"
                 },
                 "user_id": {
                     "type": "string"
@@ -2283,20 +2207,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "period": {
-                    "$ref": "#/definitions/budgeting.Period"
+                    "type": "string"
                 },
                 "start_date": {
-                    "type": "string"
-                }
-            }
-        },
-        "budgeting.UpdateBudgetResp": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string"
-                },
-                "status": {
                     "type": "string"
                 }
             }
@@ -2314,7 +2227,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "$ref": "#/definitions/budgeting.Status"
+                    "type": "string"
                 },
                 "target_amount": {
                     "type": "number"
@@ -2348,7 +2261,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "type": {
-                    "$ref": "#/definitions/budgeting.TypeTrnsaction"
+                    "type": "string"
                 }
             }
         },
@@ -2374,6 +2287,17 @@ const docTemplate = `{
                 },
                 "status": {
                     "type": "integer"
+                }
+            }
+        },
+        "models.Response": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
                 }
             }
         },

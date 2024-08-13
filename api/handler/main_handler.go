@@ -35,5 +35,5 @@ func (mh *mainHandlerImpl) UserHandler() uhandler.UserHandler {
 }
 
 func (mh *mainHandlerImpl) BudgetHandler() bhandler.BudgettingHandler {
-	return bhandler.NewBudgettingHandler(mh.service, mh.logger)
+	return bhandler.NewBudgettingHandler(mh.service, mh.logger, mh.kafkaProducer)
 }

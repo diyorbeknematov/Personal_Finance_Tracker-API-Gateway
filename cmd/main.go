@@ -15,13 +15,13 @@ func main() {
 	logger := logs.InitLogger()
 	cfg := config.Load()
 
-	kafkaProducer := producer.NewKafkaProducer([]string{"localhost:9092"}, logger)
+	kafkaProducer := producer.NewKafkaProducer([]string{"localhost:9092"})
 	defer kafkaProducer.Close()
 
 	rabbitMQProducer, err := producermq.NewRabbitMQProducer("amqp://guest:guest@localhost:5672/")
 	if err != nil {
-        log.Fatal(err)
-    }
+		log.Fatal(err)
+	}
 	defer rabbitMQProducer.Close()
 
 	serviceManager, err := service.NewServiceManager(cfg)
@@ -33,6 +33,6 @@ func main() {
 	controller.SetupRoutes(serviceManager, kafkaProducer, rabbitMQProducer, logger)
 	err = controller.Start(cfg)
 	if err != nil {
-        log.Fatal(err)
-    }
+		log.Fatal(err)
+	}
 }

@@ -2,6 +2,7 @@ package bhandler
 
 import (
 	"api-gateway/generated/budgeting"
+	"api-gateway/queue/kafka/producer"
 	"api-gateway/service"
 	"log/slog"
 
@@ -48,14 +49,16 @@ type budgettingHandlerImpl struct {
 	financeManagement budgeting.FinanceManagementServiceClient
 	budgetManagement  budgeting.BudgetingServiceClient
 	goalsManagement   budgeting.GoalsManagemenServiceClient
+	producer          producer.KafkaProducer
 	logger            *slog.Logger
 }
 
-func NewBudgettingHandler(serviceManger service.ServiceManager, logger *slog.Logger) BudgettingHandler {
+func NewBudgettingHandler(serviceManger service.ServiceManager, logger *slog.Logger, producer producer.KafkaProducer) BudgettingHandler {
 	return &budgettingHandlerImpl{
 		financeManagement: serviceManger.FinanceManagement(),
 		budgetManagement:  serviceManger.BudgetManagement(),
 		goalsManagement:   serviceManger.GoalsManagement(),
+		producer:          producer,
 		logger:            logger,
 	}
 }
