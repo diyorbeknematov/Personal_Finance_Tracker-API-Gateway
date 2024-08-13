@@ -3,3 +3,17 @@
 {"time":"2024-08-10T21:16:47.946376283+05:00","level":"INFO","msg":"Application started"}
 {"time":"2024-08-10T21:16:47.957436947+05:00","level":"INFO","msg":"Starting GRPC server"}
 {"time":"2024-08-10T21:17:54.942455367+05:00","level":"ERROR","msg":"Token not found in context"}
+{"time":"2024-08-12T20:05:26.717922894+05:00","level":"ERROR","msg":"Internal Server Error","error":"rpc error: code = Unimplemented desc = unknown service finance_management.FinanceManagementService"}
+{"time":"2024-08-12T20:10:50.574433821+05:00","level":"ERROR","msg":"Internal Server Error","error":"rpc error: code = Unimplemented desc = unknown service finance_management.FinanceManagementService"}
+{"time":"2024-08-13T08:42:43.271077964+05:00","level":"ERROR","msg":"Invalid request body","error":"strconv.ParseInt: parsing \"dfafdadsf \": invalid syntax"}
+{"time":"2024-08-13T08:43:20.651699508+05:00","level":"ERROR","msg":"Invalid request body","error":"strconv.ParseInt: parsing \"expense\": invalid syntax"}
+{"time":"2024-08-13T08:43:34.320285075+05:00","level":"ERROR","msg":"Invalid request body","error":"strconv.ParseInt: parsing \"EXPENSE\": invalid syntax"}
+{"time":"2024-08-13T08:43:55.970492473+05:00","level":"ERROR","msg":"Invalid request body","error":"strconv.ParseInt: parsing \"expense\": invalid syntax"}
+{"time":"2024-08-13T08:44:19.740754587+05:00","level":"ERROR","msg":"Internal Server Error","error":"rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: dial tcp 127.0.0.1:50051: connect: connection refused\""}
+{"time":"2024-08-13T15:53:03.157899252+05:00","level":"ERROR","msg":"Missing token claims","error":"http: named cookie not present"}
+{"time":"2024-08-13T15:57:50.158818283+05:00","level":"ERROR","msg":"Missing token claims","error":"http: named cookie not present"}
+{"time":"2024-08-13T15:58:27.229384163+05:00","level":"ERROR","msg":"Missing token claims","error":"http: named cookie not present"}
+{"time":"2024-08-13T16:00:50.572866832+05:00","level":"ERROR","msg":"Missing token claims","error":"http: named cookie not present"}
+{"time":"2024-08-13T16:01:52.235045569+05:00","level":"ERROR","msg":"Missing token claims","error":"http: named cookie not present"}
+{"time":"2024-08-13T16:48:00.371245949+05:00","level":"ERROR","msg":"Missing token claims","error":"http: named cookie not present"}
+{"time":"2024-08-13T16:49:00.36129496+05:00","level":"ERROR","msg":"Missing token claims","error":"http: named cookie not present"}

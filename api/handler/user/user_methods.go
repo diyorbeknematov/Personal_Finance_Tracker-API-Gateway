@@ -119,12 +119,12 @@ func (h *userHandlerImpl) ChangePasswordHandler(ctx *gin.Context) {
 // @tags user
 // @Accept json
 // @Produce json
-// @param Limit query int true "Limit"
-// @param Offset query int true "Offset"
-// @param FirstName query string true "FirstName"
-// @param LastName query string true "LastName"
-// @param Email query string true "Email"
-// @param Role query string true "Role"
+// @param Limit query int false "Limit" default(10)
+// @param Page query int false "Page" default(1)
+// @param FirstName query string false "FirstName"
+// @param LastName query string false "LastName"
+// @param Email query string false "Email"
+// @param Role query string false "Role"
 // @success 200 {object} user.GetUsersListResp
 // @failure 400 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse

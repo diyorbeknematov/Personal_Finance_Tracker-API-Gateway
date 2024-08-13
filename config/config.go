@@ -9,19 +9,20 @@ import (
 )
 
 type Config struct {
-	HTTP_PORT          int    `yaml:"http_port"`
-	GRPC_PORT          int    `yaml:"grpc_port"`
-	DB_HOST            string `yaml:"db_host"`
-	DB_PORT            int    `yaml:"db_port"`
-	DB_USER            string `yaml:"db_user"`
-	DB_PASSWORD        string `yaml:"db_password"`
-	DB_NAME            string `yaml:"db_name"`
-	Redis_HOST         string `yaml:"redis_host"`
-	Redis_PORT         int    `yaml:"redis_port"`
-	Redis_PASSWORD     string `yaml:"redis_password"`
-	Redis_DB           int    `yaml:"redis_db"`
-	Jwt_SECRET_ACCESS  string `yaml:"jwt_secret"`
-	Jwt_SECRET_REFRESH string `yaml:"jwt_secret_refresh"`
+	HTTP_PORT              int    `yaml:"http_port"`
+	BUDGETING_SERVICE_PORT int    `yaml:"budgeting_service_port"`
+	USER_SERVICE_PORT      int    `yaml:"user_service_port"`
+	DB_HOST                string `yaml:"db_host"`
+	DB_PORT                int    `yaml:"db_port"`
+	DB_USER                string `yaml:"db_user"`
+	DB_PASSWORD            string `yaml:"db_password"`
+	DB_NAME                string `yaml:"db_name"`
+	Redis_HOST             string `yaml:"redis_host"`
+	Redis_PORT             int    `yaml:"redis_port"`
+	Redis_PASSWORD         string `yaml:"redis_password"`
+	Redis_DB               int    `yaml:"redis_db"`
+	Jwt_SECRET_ACCESS      string `yaml:"jwt_secret"`
+	Jwt_SECRET_REFRESH     string `yaml:"jwt_secret_refresh"`
 }
 
 func Load() *Config {
@@ -32,7 +33,8 @@ func Load() *Config {
 	config := &Config{}
 
 	config.HTTP_PORT = cast.ToInt(coalesce("HTTP_PORT", 8080))
-	config.GRPC_PORT = cast.ToInt(coalesce("GRPC_PORT", 50051))
+	config.USER_SERVICE_PORT = cast.ToInt(coalesce("USER_SERVICE_PORT", 50050))
+	config.BUDGETING_SERVICE_PORT = cast.ToInt(coalesce("BUDGETING_SERVICE_PORT", 50051))
 
 	config.DB_HOST = cast.ToString(coalesce("DB_HOST", "localhost"))
 	config.DB_PORT = cast.ToInt(coalesce("DB_PORT", 5432))

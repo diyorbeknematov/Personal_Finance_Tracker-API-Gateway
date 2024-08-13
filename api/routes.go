@@ -9,12 +9,16 @@ import (
 	"fmt"
 	"log/slog"
 
+	_ "api-gateway/api/docs"
+
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type Controller interface {
+	Start(cfg *config.Config) error
+	SetupRoutes(service service.ServiceManager, kafkaProducer producer.KafkaProducer, rabbitmqProducer producermq.RabbitMQProducer, logger *slog.Logger)
 }
 
 type controllerImpl struct {
@@ -32,21 +36,20 @@ func NewController() Controller {
 
 func (c *controllerImpl) Start(cfg *config.Config) error {
 	if c.port == "" {
-		c.port = fmt.Sprintf("localhost:%d", cfg.HTTP_PORT)
+		c.port = fmt.Sprintf(":%d", cfg.HTTP_PORT)
 	}
 
 	return c.router.Run(c.port)
 }
 
-// @Title API Gateway
-// @Summary This is a simple API Gateway
-// @Description This is a simple API Gateway
+// @title Api Gateway
 // @version 1.0
-// @in header
-// @name Authorization
+// @description Api Gateway service
 // @BasePath /api/v1
 // @schemes http
-func (c *controllerImpl) SetupAPIRoutes(service service.ServiceManager, kafkaProducer producer.KafkaProducer, rabbitmqProducer producermq.RabbitMQProducer, logger *slog.Logger) {
+// @in header
+// @name Authorization
+func (c *controllerImpl) SetupRoutes(service service.ServiceManager, kafkaProducer producer.KafkaProducer, rabbitmqProducer producermq.RabbitMQProducer, logger *slog.Logger) {
 
 	h := handler.NewMainHandler(
 		service,
@@ -56,14 +59,61 @@ func (c *controllerImpl) SetupAPIRoutes(service service.ServiceManager, kafkaPro
 	)
 
 	c.router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	// c.router.Use(middleware.IsAuthenticated(service.User()))
 	router := c.router.Group("/api/v1")
 
 	// User routes
-	user := router.Group("/user")
+	user := router.Group("/users")
 	{
 		user.GET("/profile", h.UserHandler().GetUserProfileHandler)
 		user.PUT("/profile", h.UserHandler().UpdateUserProfileHandler)
 		user.PUT("/password", h.UserHandler().ChangePasswordHandler)
-		user.GET("/users", h.UserHandler().GetUsersListHandler)
+		user.GET("/", h.UserHandler().GetUsersListHandler)
+	}
+
+	account := router.Group("/accounts")
+	{
+		account.POST("/", h.BudgetHandler().CreateAccountHandler)
+		account.GET("/:id", h.BudgetHandler().GetAccountHandler)
+		account.PUT("/:id", h.BudgetHandler().UpdateAccountHandler)
+		account.DELETE("/:id", h.BudgetHandler().DeleteAccountHandler)
+		account.GET("/", h.BudgetHandler().GetAccountsListHandler)
+	}
+
+	budget := router.Group("/budgets")
+	{
+		budget.POST("/", h.BudgetHandler().CreateBudgetHandler)
+		budget.GET("/:id", h.BudgetHandler().GetBudgetHandler)
+		budget.PUT("/:id", h.BudgetHandler().UpdateBudgetHandler)
+		budget.DELETE("/:id", h.BudgetHandler().DeleteBudgetHandler)
+		budget.GET("/", h.BudgetHandler().GetBudgetsListHandler)
+	}
+
+	category := router.Group("/categories")
+	{
+		category.POST("/", h.BudgetHandler().CreateCategoryHandler)
+		category.PUT("/:id", h.BudgetHandler().UpdateCategoryHandler)
+		category.DELETE("/:id", h.BudgetHandler().DeleteCategoryHandler)
+		category.GET("/", h.BudgetHandler().GetCategoriesListHandler)
+		category.GET("/:id", h.BudgetHandler().GetCategoryHandler)
+	}
+
+	transaction := router.Group("/transactions")
+	{
+		transaction.POST("/", h.BudgetHandler().CreateTransactionHandler)
+		transaction.GET("/:id", h.BudgetHandler().GetTransactionHandler)
+		transaction.PUT("/:id", h.BudgetHandler().UpdateTransactionHandler)
+		transaction.DELETE("/:id", h.BudgetHandler().DeleteTransactionHandler)
+		transaction.GET("/", h.BudgetHandler().GetTransactionsListHandler)
+	}
+
+	goal := router.Group("/goals")
+	{
+		goal.POST("/", h.BudgetHandler().CreateGoalsHandler)
+        goal.GET("/:id", h.BudgetHandler().GetGoalHandler)
+        goal.PUT("/:id", h.BudgetHandler().UpdateGoalHandler)
+        goal.DELETE("/:id", h.BudgetHandler().DeleteGoalHandler)
+        goal.GET("/", h.BudgetHandler().GetGoalsListHandler)
 	}
 }

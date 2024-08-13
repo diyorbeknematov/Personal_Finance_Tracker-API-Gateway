@@ -1,0 +1,1641 @@
+basePath: /api/v1
+definitions:
+  budgeting.Account:
+    properties:
+      balance:
+        type: number
+      currency:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      type:
+        $ref: '#/definitions/budgeting.AccountType'
+      user_id:
+        type: string
+    type: object
+  budgeting.AccountType:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-varnames:
+    - AccountType_CHECKING
+    - AccountType_SAVINGS
+    - AccountType_CREDIT_CARD
+    - AccountType_CASH
+  budgeting.Budget:
+    properties:
+      amount:
+        type: number
+      category_id:
+        type: string
+      end_date:
+        type: string
+      id:
+        type: string
+      period:
+        $ref: '#/definitions/budgeting.Period'
+      start_date:
+        type: string
+      user_id:
+        type: string
+    type: object
+  budgeting.Category:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      type:
+        $ref: '#/definitions/budgeting.CategoryType'
+      user_id:
+        type: string
+    type: object
+  budgeting.CategoryType:
+    enum:
+    - 0
+    - 1
+    type: integer
+    x-enum-varnames:
+    - CategoryType_INCOME
+    - CategoryType_EXPENSE
+  budgeting.CreateAccountReq:
+    properties:
+      balance:
+        type: number
+      currency:
+        type: string
+      name:
+        type: string
+      type:
+        $ref: '#/definitions/budgeting.AccountType'
+      user_id:
+        type: string
+    type: object
+  budgeting.CreateAccountResp:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  budgeting.CreateBudgetReq:
+    properties:
+      amount:
+        type: number
+      category_id:
+        type: string
+      end_date:
+        type: string
+      period:
+        $ref: '#/definitions/budgeting.Period'
+      start_date:
+        type: string
+      user_id:
+        type: string
+    type: object
+  budgeting.CreateBudgetResp:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  budgeting.CreateCategoryReq:
+    properties:
+      name:
+        type: string
+      type:
+        $ref: '#/definitions/budgeting.CategoryType'
+      user_id:
+        type: string
+    type: object
+  budgeting.CreateCategoryResp:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  budgeting.CreateGoalReq:
+    properties:
+      current_amount:
+        type: number
+      deadline:
+        type: string
+      name:
+        type: string
+      status:
+        $ref: '#/definitions/budgeting.Status'
+      target_amount:
+        type: number
+      user_id:
+        type: string
+    type: object
+  budgeting.CreateGoalResp:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  budgeting.CreateTransactionReq:
+    properties:
+      account_id:
+        type: string
+      amount:
+        type: number
+      category_id:
+        type: string
+      date:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      type:
+        $ref: '#/definitions/budgeting.TypeTrnsaction'
+      user_id:
+        type: string
+    type: object
+  budgeting.CreateTransactionResp:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  budgeting.DeleteAccountResp:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  budgeting.DeleteBudgetResp:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  budgeting.DeleteCategoryResp:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  budgeting.DeleteGoalResp:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  budgeting.DeleteTransactionResp:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  budgeting.GetAccountResp:
+    properties:
+      balance:
+        type: number
+      currency:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      type:
+        $ref: '#/definitions/budgeting.AccountType'
+      user_id:
+        type: string
+    type: object
+  budgeting.GetAccountsListResp:
+    properties:
+      accounts:
+        items:
+          $ref: '#/definitions/budgeting.Account'
+        type: array
+      limit:
+        type: integer
+      offset:
+        type: integer
+      total_count:
+        type: integer
+    type: object
+  budgeting.GetBudgetResp:
+    properties:
+      amount:
+        type: number
+      category_id:
+        type: string
+      end_date:
+        type: string
+      id:
+        type: string
+      period:
+        $ref: '#/definitions/budgeting.Period'
+      start_date:
+        type: string
+      user_id:
+        type: string
+    type: object
+  budgeting.GetBudgetsResp:
+    properties:
+      budgets:
+        items:
+          $ref: '#/definitions/budgeting.Budget'
+        type: array
+      limit:
+        type: integer
+      page:
+        type: integer
+      total_count:
+        type: integer
+    type: object
+  budgeting.GetCategoriesResp:
+    properties:
+      categories:
+        items:
+          $ref: '#/definitions/budgeting.Category'
+        type: array
+      limit:
+        type: integer
+      page:
+        type: integer
+      total_count:
+        type: integer
+    type: object
+  budgeting.GetCategoryResp:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      type:
+        $ref: '#/definitions/budgeting.CategoryType'
+      user_id:
+        type: string
+    type: object
+  budgeting.GetGoalResp:
+    properties:
+      current_amount:
+        type: number
+      deadline:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      status:
+        $ref: '#/definitions/budgeting.Status'
+      target_amount:
+        type: number
+      user_id:
+        type: string
+    type: object
+  budgeting.GetGoalsResp:
+    properties:
+      goals:
+        items:
+          $ref: '#/definitions/budgeting.Goal'
+        type: array
+      limit:
+        type: integer
+      page:
+        type: integer
+      total_count:
+        type: integer
+    type: object
+  budgeting.GetTransactionResp:
+    properties:
+      account_id:
+        type: string
+      amount:
+        type: number
+      category_id:
+        type: string
+      date:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      type:
+        $ref: '#/definitions/budgeting.TypeTrnsaction'
+      user_id:
+        type: string
+    type: object
+  budgeting.GetTransactionsListResp:
+    properties:
+      limit:
+        type: integer
+      page:
+        type: integer
+      total_count:
+        type: integer
+      transactions:
+        items:
+          $ref: '#/definitions/budgeting.Transaction'
+        type: array
+    type: object
+  budgeting.Goal:
+    properties:
+      current_amount:
+        type: number
+      deadline:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      status:
+        $ref: '#/definitions/budgeting.Status'
+      target_amount:
+        type: number
+      user_id:
+        type: string
+    type: object
+  budgeting.Period:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-varnames:
+    - Period_DAILY
+    - Period_WEEKLY
+    - Period_MONTHLY
+    - Period_YEARLY
+  budgeting.Status:
+    enum:
+    - 0
+    - 1
+    - 2
+    type: integer
+    x-enum-varnames:
+    - Status_INPORGRESS
+    - Status_ACHIEVED
+    - Status_FAILED
+  budgeting.Transaction:
+    properties:
+      account_id:
+        type: string
+      amount:
+        type: number
+      category_id:
+        type: string
+      date:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      type:
+        $ref: '#/definitions/budgeting.TypeTrnsaction'
+      user_id:
+        type: string
+    type: object
+  budgeting.TypeTrnsaction:
+    enum:
+    - 0
+    - 1
+    type: integer
+    x-enum-varnames:
+    - TypeTrnsaction_INCOME
+    - TypeTrnsaction_EXPENSE
+  budgeting.UpdateAccountReq:
+    properties:
+      balance:
+        type: number
+      currency:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      type:
+        $ref: '#/definitions/budgeting.AccountType'
+      user_id:
+        type: string
+    type: object
+  budgeting.UpdateAccountResp:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  budgeting.UpdateBudgetReq:
+    properties:
+      amount:
+        type: number
+      category_id:
+        type: string
+      end_date:
+        type: string
+      id:
+        type: string
+      period:
+        $ref: '#/definitions/budgeting.Period'
+      start_date:
+        type: string
+    type: object
+  budgeting.UpdateBudgetResp:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  budgeting.UpdateGoalReq:
+    properties:
+      deadline:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      status:
+        $ref: '#/definitions/budgeting.Status'
+      target_amount:
+        type: number
+    type: object
+  budgeting.UpdateGoalResp:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  budgeting.UpdateTransactionReq:
+    properties:
+      amount:
+        type: number
+      date:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      type:
+        $ref: '#/definitions/budgeting.TypeTrnsaction'
+    type: object
+  budgeting.UpdateTransactionResp:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  models.ErrorResponse:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  user.ChangePasswordReq:
+    properties:
+      current_password:
+        type: string
+      id:
+        type: string
+      new_password:
+        type: string
+    type: object
+  user.ChangePasswordResp:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  user.GetUsersListResp:
+    properties:
+      limit:
+        type: integer
+      page:
+        type: integer
+      total_count:
+        type: integer
+      users:
+        items:
+          $ref: '#/definitions/user.UserProfile'
+        type: array
+    type: object
+  user.UpdateUserProfileReq:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+    type: object
+  user.UpdateUserProfileResp:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  user.UserProfile:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+      role:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: Api Gateway service
+  title: Api Gateway
+  version: "1.0"
+paths:
+  /accounts:
+    get:
+      consumes:
+      - application/json
+      description: get accounts list
+      parameters:
+      - description: user id
+        in: query
+        name: UserId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.GetAccountsListResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: get accounts list
+      tags:
+      - account
+    post:
+      consumes:
+      - application/json
+      description: Create account
+      parameters:
+      - description: account
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/budgeting.CreateAccountReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.CreateAccountResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Create account
+      tags:
+      - account
+  /accounts/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete account
+      parameters:
+      - description: account id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.DeleteAccountResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: delete account
+      tags:
+      - account
+    get:
+      consumes:
+      - application/json
+      description: get account
+      parameters:
+      - description: account id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.GetAccountResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: get account
+      tags:
+      - account
+    put:
+      consumes:
+      - application/json
+      description: update account
+      parameters:
+      - description: account id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: account
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/budgeting.UpdateAccountReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.UpdateAccountResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: update account
+      tags:
+      - account
+  /budgets:
+    get:
+      consumes:
+      - application/json
+      description: list budgets
+      parameters:
+      - description: user id
+        in: query
+        name: UserId
+        type: string
+      - description: category id
+        in: query
+        name: CategoryId
+        type: string
+      - description: period
+        in: query
+        name: Period
+        type: string
+      - description: start date
+        in: query
+        name: StartDate
+        type: string
+      - description: end date
+        in: query
+        name: EndDate
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.GetBudgetsResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: list budgets
+      tags:
+      - budget
+    post:
+      consumes:
+      - application/json
+      description: Create budget
+      parameters:
+      - description: Budget
+        in: body
+        name: budget
+        required: true
+        schema:
+          $ref: '#/definitions/budgeting.CreateBudgetReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.CreateBudgetResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Create budget
+      tags:
+      - budget
+  /budgets/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete budget
+      parameters:
+      - description: budget id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.DeleteBudgetResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: delete budget
+      tags:
+      - budget
+    get:
+      consumes:
+      - application/json
+      description: get budget
+      parameters:
+      - description: budget id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.GetBudgetResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: get budget
+      tags:
+      - budget
+    put:
+      consumes:
+      - application/json
+      description: update budget
+      parameters:
+      - description: budget id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: budget
+        in: body
+        name: budget
+        required: true
+        schema:
+          $ref: '#/definitions/budgeting.UpdateBudgetReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.UpdateBudgetResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: update budget
+      tags:
+      - budget
+  /categories:
+    get:
+      consumes:
+      - application/json
+      description: Gets all categories
+      parameters:
+      - default: 10
+        description: Limit
+        in: query
+        name: Limit
+        type: integer
+      - default: 1
+        description: Offset
+        in: query
+        name: Offset
+        type: integer
+      - description: Name
+        in: query
+        name: Name
+        type: string
+      - description: Type
+        in: query
+        name: Type
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.GetCategoriesResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get all categories
+      tags:
+      - category
+    post:
+      consumes:
+      - application/json
+      description: Creates a new category
+      parameters:
+      - description: New category
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/budgeting.CreateCategoryReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.CreateCategoryResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Create a new category
+      tags:
+      - category
+  /categories/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a category
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.DeleteCategoryResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Delete a category
+      tags:
+      - category
+    get:
+      consumes:
+      - application/json
+      description: Gets a category by id
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.GetCategoryResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get a category by id
+      tags:
+      - category
+  /goals:
+    get:
+      consumes:
+      - application/json
+      description: Gets all goals
+      parameters:
+      - description: Page number
+        in: query
+        name: PageNumber
+        required: true
+        type: integer
+      - description: Number of items per page
+        in: query
+        name: PageSize
+        required: true
+        type: integer
+      - description: Filter by name
+        in: query
+        name: Name
+        type: string
+      - description: Filter by target amount
+        in: query
+        name: TargetAmount
+        type: number
+      - description: Filter by status
+        in: query
+        name: Status
+        type: string
+      - description: Filter by deadline
+        in: query
+        name: Deadline
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.GetGoalsResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get all goals
+      tags:
+      - goal
+    post:
+      consumes:
+      - application/json
+      description: Creates a new goal
+      parameters:
+      - description: New goal
+        in: body
+        name: goal
+        required: true
+        schema:
+          $ref: '#/definitions/budgeting.CreateGoalReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.CreateGoalResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Create a new goal
+      tags:
+      - goal
+  /goals/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a goal
+      parameters:
+      - description: Goal ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.DeleteGoalResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Delete a goal
+      tags:
+      - goal
+    get:
+      consumes:
+      - application/json
+      description: Gets a goal by id
+      parameters:
+      - description: Goal ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.GetGoalResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get a goal by id
+      tags:
+      - goal
+    put:
+      consumes:
+      - application/json
+      description: Updates a goal
+      parameters:
+      - description: Goal ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated goal
+        in: body
+        name: goal
+        required: true
+        schema:
+          $ref: '#/definitions/budgeting.UpdateGoalReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.UpdateGoalResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Update a goal
+      tags:
+      - goal
+  /transactions:
+    get:
+      consumes:
+      - application/json
+      description: get transactions list
+      parameters:
+      - description: limit
+        in: query
+        name: Limit
+        type: integer
+      - description: offset
+        in: query
+        name: Offset
+        type: integer
+      - description: Account name
+        in: query
+        name: AccountName
+        type: string
+      - description: Amount
+        in: query
+        name: Amount
+        type: number
+      - description: Category name
+        in: query
+        name: CategoryName
+        type: string
+      - description: Type
+        in: query
+        name: Type
+        type: string
+      - description: Description
+        in: query
+        name: Description
+        type: string
+      - description: Date from
+        in: query
+        name: DateFrom
+        type: string
+      - description: Date to
+        in: query
+        name: DateTo
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.GetTransactionsListResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: get transactions list
+      tags:
+      - transaction
+    post:
+      consumes:
+      - application/json
+      description: Create transaction
+      parameters:
+      - description: transaction
+        in: body
+        name: transaction
+        required: true
+        schema:
+          $ref: '#/definitions/budgeting.CreateTransactionReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.CreateTransactionResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Create transaction
+      tags:
+      - transaction
+  /transactions/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete transaction
+      parameters:
+      - description: transaction id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.DeleteTransactionResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: delete transaction
+      tags:
+      - transaction
+    get:
+      consumes:
+      - application/json
+      description: get transaction
+      parameters:
+      - description: transaction id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.GetTransactionResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: get transaction
+      tags:
+      - transaction
+    put:
+      consumes:
+      - application/json
+      description: update transaction
+      parameters:
+      - description: transaction id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: transaction
+        in: body
+        name: transaction
+        required: true
+        schema:
+          $ref: '#/definitions/budgeting.UpdateTransactionReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.UpdateTransactionResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: update transaction
+      tags:
+      - transaction
+  /user/password:
+    put:
+      consumes:
+      - application/json
+      description: This API is used to change password
+      parameters:
+      - description: Change Password
+        in: body
+        name: changePassword
+        required: true
+        schema:
+          $ref: '#/definitions/user.ChangePasswordReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.ChangePasswordResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Change Password
+      tags:
+      - user
+  /user/profile:
+    get:
+      consumes:
+      - application/json
+      description: This API is used to get user profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.UserProfile'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get User Profile
+      tags:
+      - user
+    put:
+      consumes:
+      - application/json
+      description: This API is used to update user profile
+      parameters:
+      - description: User Profile
+        in: body
+        name: userProfile
+        required: true
+        schema:
+          $ref: '#/definitions/user.UpdateUserProfileReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.UpdateUserProfileResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Update User Profile
+      tags:
+      - user
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: This API is used to get users list
+      parameters:
+      - default: 10
+        description: Limit
+        in: query
+        name: Limit
+        type: integer
+      - default: 1
+        description: Page
+        in: query
+        name: Page
+        type: integer
+      - description: FirstName
+        in: query
+        name: FirstName
+        type: string
+      - description: LastName
+        in: query
+        name: LastName
+        type: string
+      - description: Email
+        in: query
+        name: Email
+        type: string
+      - description: Role
+        in: query
+        name: Role
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.GetUsersListResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get Users List
+      tags:
+      - user
+schemes:
+- http
+swagger: "2.0"

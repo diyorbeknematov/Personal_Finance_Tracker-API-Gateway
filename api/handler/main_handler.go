@@ -1,6 +1,7 @@
 package handler
 
 import (
+	bhandler "api-gateway/api/handler/budgeting"
 	uhandler "api-gateway/api/handler/user"
 	"api-gateway/queue/kafka/producer"
 	"api-gateway/queue/rabbitmq/producermq"
@@ -10,6 +11,7 @@ import (
 
 type MainHandler interface {
 	UserHandler() uhandler.UserHandler
+	BudgetHandler() bhandler.BudgettingHandler
 }
 
 type mainHandlerImpl struct {
@@ -30,4 +32,8 @@ func NewMainHandler(service service.ServiceManager, logger *slog.Logger, kafkaPr
 
 func (mh *mainHandlerImpl) UserHandler() uhandler.UserHandler {
 	return uhandler.NewUserHandler(mh.service.User(), mh.logger)
+}
+
+func (mh *mainHandlerImpl) BudgetHandler() bhandler.BudgettingHandler {
+	return bhandler.NewBudgettingHandler(mh.service, mh.logger)
 }

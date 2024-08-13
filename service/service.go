@@ -25,9 +25,9 @@ type serviceManagerImpl struct {
 	user              user.AuthServiceClient
 }
 
-func NewServiceManager(cfg config.Config) (ServiceManager, error) {
+func NewServiceManager(cfg *config.Config) (ServiceManager, error) {
 	connBudget, err := grpc.NewClient(
-		fmt.Sprintf("localhost:%d", cfg.GRPC_PORT),
+		fmt.Sprintf("localhost:%d", cfg.BUDGETING_SERVICE_PORT),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 
@@ -35,9 +35,9 @@ func NewServiceManager(cfg config.Config) (ServiceManager, error) {
 		log.Println("error connecting to gRPC server: ", err)
 		return nil, err
 	}
-
+	
 	connUser, err := grpc.NewClient(
-		fmt.Sprintf("localhost:%d", cfg.GRPC_PORT),
+		fmt.Sprintf("localhost:%d", cfg.USER_SERVICE_PORT),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {

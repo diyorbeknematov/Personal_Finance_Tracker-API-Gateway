@@ -4,6 +4,8 @@ import (
 	"api-gateway/api/token"
 	"api-gateway/generated/user"
 	"context"
+	"fmt"
+	"log"
 	"log/slog"
 	"net/http"
 
@@ -11,8 +13,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func IsAuthenticated(authServiceClient user.AuthServiceClient) gin.HandlerFunc {
+func IsAuthenticated(auth user.AuthServiceClient) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		fmt.Println("salom nima gap")
 		tokenString, err := c.Cookie("access_token")
 		if err != nil {
 			c.AbortWithStatusJSON(401, gin.H{"error": "Missing access token"})
@@ -20,8 +23,9 @@ func IsAuthenticated(authServiceClient user.AuthServiceClient) gin.HandlerFunc {
 		}
 
 		ctx := context.Background()
-		resp, err := authServiceClient.ValidateToken(ctx, &user.ValidateTokenReq{Token: tokenString})
+		resp, err := auth.ValidateToken(ctx, &user.ValidateTokenReq{Token: tokenString})
 		if err != nil {
+			log.Println("Error validating token", err)
 			c.AbortWithStatusJSON(403, gin.H{"error": "Invalid access token"})
 			return
 		}
@@ -36,6 +40,7 @@ func IsAuthenticated(authServiceClient user.AuthServiceClient) gin.HandlerFunc {
 			Email: resp.Email,
 			Role:  resp.Role,
 		})
+		fmt.Println("tugadi")
 		c.Next()
 	}
 }

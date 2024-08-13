@@ -1,6 +1,8 @@
 package producermq
 
 import (
+	"log"
+
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
@@ -15,7 +17,6 @@ type rabbitmqProducerImpl struct {
 	queueName string
 }
 
-
 func NewRabbitMQProducer(url string) (RabbitMQProducer, error) {
 	conn, err := amqp.Dial(url)
 	if err != nil {
@@ -24,7 +25,7 @@ func NewRabbitMQProducer(url string) (RabbitMQProducer, error) {
 
 	ch, err := conn.Channel()
 	if err != nil {
-		conn.Close() 
+		conn.Close()
 		return nil, err
 	}
 
@@ -41,6 +42,7 @@ func NewRabbitMQProducer(url string) (RabbitMQProducer, error) {
 		conn.Close()
 		return nil, err
 	}
+	log.Println("RabbitMQ Producer created")
 
 	return &rabbitmqProducerImpl{
 		conn:      conn,
