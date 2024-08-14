@@ -17,7 +17,7 @@ import (
 // @Failure 400 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
 // @Failure 404 {object} map[string]interface{}
-// @router /user/profile [get]
+// @router /users/profile [get]
 func (h *userHandlerImpl) GetUserProfileHandler(ctx *gin.Context) {
 	val, exists := ctx.Get("claims")
 	if !exists {
@@ -54,7 +54,7 @@ func (h *userHandlerImpl) GetUserProfileHandler(ctx *gin.Context) {
 // @Failure 400 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
 // @Failure 404 {object} map[string]interface{}
-// @router /user/profile [put]
+// @router /users/profile [put]
 func (h *userHandlerImpl) UpdateUserProfileHandler(ctx *gin.Context) {
 	var userProfile pb.UpdateUserProfileReq
 	if err := ctx.ShouldBindJSON(&userProfile); err != nil {
@@ -89,7 +89,7 @@ func (h *userHandlerImpl) UpdateUserProfileHandler(ctx *gin.Context) {
 // @Failure 400 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
 // @Failure 404	{object} map[string]interface{}
-// @router /user/password [put]
+// @router /users/password [put]
 func (h *userHandlerImpl) ChangePasswordHandler(ctx *gin.Context) {
 	var changePassword pb.ChangePasswordReq
 	if err := ctx.ShouldBindJSON(&changePassword); err != nil {

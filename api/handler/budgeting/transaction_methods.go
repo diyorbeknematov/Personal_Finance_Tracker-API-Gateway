@@ -66,7 +66,7 @@ func (h *budgettingHandlerImpl) CreateTransactionHandler(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, models.Response{
 		Message: "Transaction created successfully",
-		Status: "success",
+		Status:  "success",
 	})
 }
 
@@ -215,7 +215,7 @@ func (h *budgettingHandlerImpl) DeleteTransactionHandler(ctx *gin.Context) {
 // @accept json
 // @produce json
 // @param Limit query int false "limit" default(10)
-// @param Paga query int false "offset" default(1)
+// @param Page query int false "offset" default(1)
 // @param AccountName query string false "Account name"
 // @param Amount query float64 false "Amount"
 // @param CategoryName query string false "Category name"
@@ -240,12 +240,6 @@ func (h *budgettingHandlerImpl) GetTransactionsListHandler(ctx *gin.Context) {
 		return
 	}
 
-	if query.Limit == 0 {
-		query.Limit = 10
-	}
-	if query.Page == 0 {
-		query.Page = 1
-	}
 	resp, err := h.financeManagement.GetTransactionsList(ctx, &query)
 	if err != nil {
 		h.logger.Error("Internal Server Error", "error", err)

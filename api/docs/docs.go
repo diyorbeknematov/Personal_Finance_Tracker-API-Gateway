@@ -1145,6 +1145,164 @@ const docTemplate = `{
                 }
             }
         },
+        "/notification/{id}": {
+            "get": {
+                "description": "Get notification",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notification"
+                ],
+                "summary": "Get notification",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Notification ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/budgeting.GetNotificationResp"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update notification",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notification"
+                ],
+                "summary": "Update notification",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Notification ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated notification",
+                        "name": "notification",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/budgeting.UpdateNotificationReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/budgeting.UpdateNotificationResp"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete notification",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notification"
+                ],
+                "summary": "Delete notification",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Notification ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/budgeting.DeleteNotificationResp"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/reporting/budget-performance": {
             "get": {
                 "description": "This endpoint will return the income report",
@@ -1155,12 +1313,6 @@ const docTemplate = `{
                     "reporting"
                 ],
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "UserId",
-                        "in": "query"
-                    },
                     {
                         "type": "integer",
                         "default": 2024,
@@ -1214,14 +1366,6 @@ const docTemplate = `{
                 "tags": [
                     "reporting"
                 ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "UserId",
-                        "in": "query"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1261,12 +1405,6 @@ const docTemplate = `{
                     "reporting"
                 ],
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "UserId",
-                        "in": "query"
-                    },
                     {
                         "type": "boolean",
                         "description": "Yearly report",
@@ -1319,12 +1457,6 @@ const docTemplate = `{
                     "reporting"
                 ],
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "UserId",
-                        "in": "query"
-                    },
                     {
                         "type": "boolean",
                         "description": "Yearly report",
@@ -1392,7 +1524,7 @@ const docTemplate = `{
                         "type": "integer",
                         "default": 1,
                         "description": "offset",
-                        "name": "Paga",
+                        "name": "Page",
                         "in": "query"
                     },
                     {
@@ -1676,7 +1808,89 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/password": {
+        "/users": {
+            "get": {
+                "description": "This API is used to get users list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Get Users List",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Limit",
+                        "name": "Limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page",
+                        "name": "Page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "FirstName",
+                        "name": "FirstName",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "LastName",
+                        "name": "LastName",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Email",
+                        "name": "Email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Role",
+                        "name": "Role",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.GetUsersListResp"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/password": {
             "put": {
                 "description": "This API is used to change password",
                 "consumes": [
@@ -1729,7 +1943,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/profile": {
+        "/users/profile": {
             "get": {
                 "description": "This API is used to get user profile",
                 "consumes": [
@@ -1798,88 +2012,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/user.UpdateUserProfileResp"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/models.ErrorResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/models.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/users": {
-            "get": {
-                "description": "This API is used to get users list",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "user"
-                ],
-                "summary": "Get Users List",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "default": 10,
-                        "description": "Limit",
-                        "name": "Limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "default": 1,
-                        "description": "Page",
-                        "name": "Page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "FirstName",
-                        "name": "FirstName",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "LastName",
-                        "name": "LastName",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Email",
-                        "name": "Email",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Role",
-                        "name": "Role",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/user.GetUsersListResp"
                         }
                     },
                     "400": {
@@ -2186,6 +2318,17 @@ const docTemplate = `{
                 }
             }
         },
+        "budgeting.DeleteNotificationResp": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
         "budgeting.DeleteTransactionResp": {
             "type": "object",
             "properties": {
@@ -2414,6 +2557,40 @@ const docTemplate = `{
                 }
             }
         },
+        "budgeting.GetNotificationResp": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "is_read": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "budgeting.GetNotificationsListResp": {
+            "type": "object",
+            "properties": {
+                "notification_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/budgeting.Notification"
+                    }
+                }
+            }
+        },
         "budgeting.GetSependingResp": {
             "type": "object",
             "properties": {
@@ -2520,6 +2697,57 @@ const docTemplate = `{
                 },
                 "target_amount": {
                     "type": "number"
+                }
+            }
+        },
+        "budgeting.Notification": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "is_read": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "budgeting.SendNotificationReq": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "budgeting.SendNotificationResp": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
                 }
             }
         },
@@ -2630,6 +2858,28 @@ const docTemplate = `{
             }
         },
         "budgeting.UpdateGoalResp": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "budgeting.UpdateNotificationReq": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "is_read": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "budgeting.UpdateNotificationResp": {
             "type": "object",
             "properties": {
                 "message": {

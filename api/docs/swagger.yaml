@@ -181,6 +181,13 @@ definitions:
       status:
         type: string
     type: object
+  budgeting.DeleteNotificationResp:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
   budgeting.DeleteTransactionResp:
     properties:
       message:
@@ -329,6 +336,28 @@ definitions:
       yearly:
         type: boolean
     type: object
+  budgeting.GetNotificationResp:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      is_read:
+        type: boolean
+      message:
+        type: string
+      status:
+        type: string
+      type:
+        type: string
+    type: object
+  budgeting.GetNotificationsListResp:
+    properties:
+      notification_list:
+        items:
+          $ref: '#/definitions/budgeting.Notification'
+        type: array
+    type: object
   budgeting.GetSependingResp:
     properties:
       monthly:
@@ -400,6 +429,39 @@ definitions:
       target_amount:
         type: number
     type: object
+  budgeting.Notification:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      is_read:
+        type: boolean
+      message:
+        type: string
+      status:
+        type: string
+      type:
+        type: string
+    type: object
+  budgeting.SendNotificationReq:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+      type:
+        type: string
+      user_id:
+        type: string
+    type: object
+  budgeting.SendNotificationResp:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
   budgeting.Transaction:
     properties:
       account_id:
@@ -470,6 +532,20 @@ definitions:
         type: number
     type: object
   budgeting.UpdateGoalResp:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  budgeting.UpdateNotificationReq:
+    properties:
+      id:
+        type: string
+      is_read:
+        type: boolean
+    type: object
+  budgeting.UpdateNotificationResp:
     properties:
       message:
         type: string
@@ -1335,14 +1411,116 @@ paths:
       summary: Update a goal
       tags:
       - goal
+  /notification/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete notification
+      parameters:
+      - description: Notification ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.DeleteNotificationResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Delete notification
+      tags:
+      - notification
+    get:
+      consumes:
+      - application/json
+      description: Get notification
+      parameters:
+      - description: Notification ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.GetNotificationResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get notification
+      tags:
+      - notification
+    put:
+      consumes:
+      - application/json
+      description: Update notification
+      parameters:
+      - description: Notification ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated notification
+        in: body
+        name: notification
+        required: true
+        schema:
+          $ref: '#/definitions/budgeting.UpdateNotificationReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.UpdateNotificationResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Update notification
+      tags:
+      - notification
   /reporting/budget-performance:
     get:
       description: This endpoint will return the income report
       parameters:
-      - description: User ID
-        in: query
-        name: UserId
-        type: string
       - default: 2024
         description: Year report
         in: query
@@ -1378,11 +1556,6 @@ paths:
   /reporting/goal-progress:
     get:
       description: This endpoint will return the goal progress report
-      parameters:
-      - description: User ID
-        in: query
-        name: UserId
-        type: string
       produces:
       - application/json
       responses:
@@ -1409,10 +1582,6 @@ paths:
     get:
       description: This endpoint will return the income report
       parameters:
-      - description: User ID
-        in: query
-        name: UserId
-        type: string
       - description: Yearly report
         in: query
         name: Yearly
@@ -1447,10 +1616,6 @@ paths:
     get:
       description: This endpoint will return the sepending report
       parameters:
-      - description: User ID
-        in: query
-        name: UserId
-        type: string
       - description: Yearly report
         in: query
         name: Yearly
@@ -1495,7 +1660,7 @@ paths:
       - default: 1
         description: offset
         in: query
-        name: Paga
+        name: Page
         type: integer
       - description: Account name
         in: query
@@ -1688,7 +1853,62 @@ paths:
       summary: update transaction
       tags:
       - transaction
-  /user/password:
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: This API is used to get users list
+      parameters:
+      - default: 10
+        description: Limit
+        in: query
+        name: Limit
+        type: integer
+      - default: 1
+        description: Page
+        in: query
+        name: Page
+        type: integer
+      - description: FirstName
+        in: query
+        name: FirstName
+        type: string
+      - description: LastName
+        in: query
+        name: LastName
+        type: string
+      - description: Email
+        in: query
+        name: Email
+        type: string
+      - description: Role
+        in: query
+        name: Role
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.GetUsersListResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get Users List
+      tags:
+      - user
+  /users/password:
     put:
       consumes:
       - application/json
@@ -1723,7 +1943,7 @@ paths:
       summary: Change Password
       tags:
       - user
-  /user/profile:
+  /users/profile:
     get:
       consumes:
       - application/json
@@ -1783,61 +2003,6 @@ paths:
           schema:
             $ref: '#/definitions/models.ErrorResponse'
       summary: Update User Profile
-      tags:
-      - user
-  /users:
-    get:
-      consumes:
-      - application/json
-      description: This API is used to get users list
-      parameters:
-      - default: 10
-        description: Limit
-        in: query
-        name: Limit
-        type: integer
-      - default: 1
-        description: Page
-        in: query
-        name: Page
-        type: integer
-      - description: FirstName
-        in: query
-        name: FirstName
-        type: string
-      - description: LastName
-        in: query
-        name: LastName
-        type: string
-      - description: Email
-        in: query
-        name: Email
-        type: string
-      - description: Role
-        in: query
-        name: Role
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/user.GetUsersListResp'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/models.ErrorResponse'
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties: true
-            type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/models.ErrorResponse'
-      summary: Get Users List
       tags:
       - user
 schemes:

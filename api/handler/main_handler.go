@@ -4,7 +4,6 @@ import (
 	bhandler "api-gateway/api/handler/budgeting"
 	uhandler "api-gateway/api/handler/user"
 	"api-gateway/queue/kafka/producer"
-	"api-gateway/queue/rabbitmq/producermq"
 	"api-gateway/service"
 	"log/slog"
 )
@@ -15,18 +14,18 @@ type MainHandler interface {
 }
 
 type mainHandlerImpl struct {
-	service          service.ServiceManager
-	logger           *slog.Logger
-	kafkaProducer    producer.KafkaProducer
-	rabbitmqProducer producermq.RabbitMQProducer
+	service       service.ServiceManager
+	logger        *slog.Logger
+	kafkaProducer producer.KafkaProducer
+	// rabbitmqProducer producermq.RabbitMQProducer
 }
 
-func NewMainHandler(service service.ServiceManager, logger *slog.Logger, kafkaProducer producer.KafkaProducer, rabbitmqProducer producermq.RabbitMQProducer) MainHandler {
+func NewMainHandler(service service.ServiceManager, logger *slog.Logger, kafkaProducer producer.KafkaProducer) MainHandler {
 	return &mainHandlerImpl{
-		service:          service,
-		logger:           logger,
-		kafkaProducer:    kafkaProducer,
-		rabbitmqProducer: rabbitmqProducer,
+		service:       service,
+		logger:        logger,
+		kafkaProducer: kafkaProducer,
+		// rabbitmqProducer: rabbitmqProducer,
 	}
 }
 

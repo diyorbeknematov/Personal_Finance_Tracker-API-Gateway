@@ -49,6 +49,13 @@ type BudgettingHandler interface {
 	GetBudgetPerformanceHandler(ctx *gin.Context)
 	GetGoalProgressHandler(ctx *gin.Context)
 	GetIncomeReportHandler(ctx *gin.Context)
+
+	// Notification
+	SendNotificationHandler(ctx *gin.Context)
+	GetNotificationListHandler(ctx *gin.Context)
+	GetNotificationHandler(ctx *gin.Context)
+	UpdateNotificationHandler(ctx *gin.Context)
+	DeleteNotificationHandler(ctx *gin.Context)
 }
 
 type budgettingHandlerImpl struct {

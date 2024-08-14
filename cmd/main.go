@@ -5,7 +5,6 @@ import (
 	"api-gateway/config"
 	"api-gateway/pkg/logs"
 	"api-gateway/queue/kafka/producer"
-	"api-gateway/queue/rabbitmq/producermq"
 	"api-gateway/service"
 	"log"
 )
@@ -15,14 +14,20 @@ func main() {
 	logger := logs.InitLogger()
 	cfg := config.Load()
 
-	kafkaProducer := producer.NewKafkaProducer([]string{"localhost:9092"})
+	kafkaProducer := producer.NewKafkaProducer(cfg.KafkaBrokers)
 	defer kafkaProducer.Close()
 
-	rabbitMQProducer, err := producermq.NewRabbitMQProducer("amqp://guest:guest@localhost:5672/")
+	// rabbitMQProducer, err := producermq.NewRabbitMQProducer("amqp://guest:guest@localhost:5672/")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// defer rabbitMQProducer.Close()
+	enforcer, err := config.CasbinEnforcer()
 	if err != nil {
-		log.Fatal(err)
-	}
-	defer rabbitMQProducer.Close()
+		log.Println("error initializing Casbin enforcer: ", err)
+        log.Fatal(err)
+    }
+
 
 	serviceManager, err := service.NewServiceManager(cfg)
 	if err != nil {
@@ -30,7 +35,7 @@ func main() {
 	}
 
 	controller := api.NewController()
-	controller.SetupRoutes(serviceManager, kafkaProducer, rabbitMQProducer, logger)
+	controller.SetupRoutes(serviceManager, kafkaProducer, enforcer, logger)
 	err = controller.Start(cfg)
 	if err != nil {
 		log.Fatal(err)

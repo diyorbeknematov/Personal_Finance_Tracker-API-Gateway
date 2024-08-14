@@ -1,6 +1,7 @@
 package bhandler
 
 import (
+	"api-gateway/api/token"
 	pb "api-gateway/generated/budgeting"
 	"api-gateway/models"
 
@@ -12,7 +13,6 @@ import (
 // @tags 		reporting
 // @accepts 	json
 // @produce 	json
-// @param 		UserId query string false "User ID"
 // @param 		Yearly query bool false "Yearly report"
 // @param 		Monthly query bool false "Monthly report"
 // @success 	200 {object} budgeting.GetSependingResp
@@ -21,6 +21,26 @@ import (
 // @failure 	500 {object} models.ErrorResponse
 // @router 		/reporting/sepending [get]
 func (h *budgettingHandlerImpl) GetSependingReportHandler(ctx *gin.Context) {
+	val, exists := ctx.Get("claims")
+	if !exists {
+		h.logger.Error("Missing token claims")
+		ctx.JSON(400, models.ErrorResponse{
+			Status:  400,
+			Message: "Missing token claims",
+			Error:   "Missing token claims",
+		})
+		return
+	}
+	claims, err := token.TokenClaimsParse(val)
+	if err != nil {
+		h.logger.Error("Invalid access token")
+		ctx.JSON(403, models.ErrorResponse{
+			Status:  403,
+			Message: "Invalid access token",
+			Error:   err.Error(),
+		})
+		return
+	}
 	var request pb.GetSependingReq
 	if err := ctx.ShouldBindQuery(&request); err != nil {
 		ctx.JSON(400, models.ErrorResponse{
@@ -30,6 +50,7 @@ func (h *budgettingHandlerImpl) GetSependingReportHandler(ctx *gin.Context) {
 		})
 		return
 	}
+	request.UserId = claims.GetId()
 	resp, err := h.reportingManagement.GetSepending(ctx, &request)
 	if err != nil {
 		ctx.JSON(500, models.ErrorResponse{
@@ -47,7 +68,6 @@ func (h *budgettingHandlerImpl) GetSependingReportHandler(ctx *gin.Context) {
 // @tags 		reporting
 // @accepts 	json
 // @produce 	json
-// @param 		UserId query string false "User ID"
 // @param 		Year query int false "Year report" default(2024)
 // @param 		Month query int false "Monthly report" default(1)
 // @success 	200 {object} budgeting.GetBudgetPerformanceResp
@@ -56,6 +76,27 @@ func (h *budgettingHandlerImpl) GetSependingReportHandler(ctx *gin.Context) {
 // @failure 	500 {object} models.ErrorResponse
 // @router 		/reporting/budget-performance [get]
 func (h *budgettingHandlerImpl) GetBudgetPerformanceHandler(ctx *gin.Context) {
+	val, exists := ctx.Get("claims")
+	if !exists {
+		h.logger.Error("Missing token claims")
+		ctx.JSON(400, models.ErrorResponse{
+			Status:  400,
+			Message: "Missing token claims",
+			Error:   "Missing token claims",
+		})
+		return
+	}
+	claims, err := token.TokenClaimsParse(val)
+	if err != nil {
+		h.logger.Error("Invalid access token")
+		ctx.JSON(403, models.ErrorResponse{
+			Status:  403,
+			Message: "Invalid access token",
+			Error:   err.Error(),
+		})
+		return
+	}
+
 	var request pb.GetBudgetPerformanceReq
 	if err := ctx.ShouldBindQuery(&request); err != nil {
 		ctx.JSON(400, models.ErrorResponse{
@@ -65,6 +106,8 @@ func (h *budgettingHandlerImpl) GetBudgetPerformanceHandler(ctx *gin.Context) {
 		})
 		return
 	}
+	request.UserId = claims.GetId()
+
 	resp, err := h.reportingManagement.GetBudgetPerformance(ctx, &request)
 	if err != nil {
 		ctx.JSON(500, models.ErrorResponse{
@@ -82,14 +125,34 @@ func (h *budgettingHandlerImpl) GetBudgetPerformanceHandler(ctx *gin.Context) {
 // @tags 		reporting
 // @accepts 	json
 // @produce 	json
-// @param 		UserId query string false "User ID"
 // @success 	200 {object} budgeting.GetGoalProgressResp
 // @failure 	400 {object} models.ErrorResponse
 // @failure 	404 {object} map[string]interface{}
 // @failure 	500 {object} models.ErrorResponse
 // @router 		/reporting/goal-progress [get]
 func (h *budgettingHandlerImpl) GetGoalProgressHandler(ctx *gin.Context) {
+	val, exists := ctx.Get("claims")
+	if !exists {
+		h.logger.Error("Missing token claims")
+		ctx.JSON(400, models.ErrorResponse{
+			Status:  400,
+			Message: "Missing token claims",
+			Error:   "Missing token claims",
+		})
+		return
+	}
+	claims, err := token.TokenClaimsParse(val)
+	if err != nil {
+		h.logger.Error("Invalid access token")
+		ctx.JSON(403, models.ErrorResponse{
+			Status:  403,
+			Message: "Invalid access token",
+			Error:   err.Error(),
+		})
+		return
+	}
 	var request pb.GetGoalProgressReq
+	request.UserId = claims.GetId()
 	if err := ctx.ShouldBindQuery(&request); err != nil {
 		ctx.JSON(400, models.ErrorResponse{
 			Status:  400,
@@ -115,7 +178,6 @@ func (h *budgettingHandlerImpl) GetGoalProgressHandler(ctx *gin.Context) {
 // @tags 		reporting
 // @accepts 	json
 // @produce 	json
-// @param 		UserId query string false "User ID"
 // @param 		Yearly query bool false "Yearly report"
 // @param 		Monthly query bool false "Monthly report"
 // @success 	200 {object} budgeting.GetIncomeReportResp
@@ -124,6 +186,26 @@ func (h *budgettingHandlerImpl) GetGoalProgressHandler(ctx *gin.Context) {
 // @failure 	500 {object} models.ErrorResponse
 // @router 		/reporting/income [get]
 func (h *budgettingHandlerImpl) GetIncomeReportHandler(ctx *gin.Context) {
+	val, exists := ctx.Get("claims")
+	if !exists {
+		h.logger.Error("Missing token claims")
+		ctx.JSON(400, models.ErrorResponse{
+			Status:  400,
+			Message: "Missing token claims",
+			Error:   "Missing token claims",
+		})
+		return
+	}
+	claims, err := token.TokenClaimsParse(val)
+	if err != nil {
+		h.logger.Error("Invalid access token")
+		ctx.JSON(403, models.ErrorResponse{
+			Status:  403,
+			Message: "Invalid access token",
+			Error:   err.Error(),
+		})
+		return
+	}
 	var request pb.GetIncomeReportReq
 	if err := ctx.ShouldBindQuery(&request); err != nil {
 		ctx.JSON(400, models.ErrorResponse{
@@ -133,6 +215,7 @@ func (h *budgettingHandlerImpl) GetIncomeReportHandler(ctx *gin.Context) {
 		})
 		return
 	}
+	request.UserId = claims.GetId()
 	resp, err := h.reportingManagement.GetIncome(ctx, &request)
 	if err != nil {
 		ctx.JSON(500, models.ErrorResponse{

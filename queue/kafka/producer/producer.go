@@ -2,6 +2,7 @@ package producer
 
 import (
 	"context"
+	"log"
 
 	"github.com/segmentio/kafka-go"
 )
@@ -16,6 +17,7 @@ type kafkaProducer struct {
 }
 
 func NewKafkaProducer(brokers []string) KafkaProducer {
+	log.Println("New kafka producer initialized with brokers:", brokers)
 	return &kafkaProducer{
 		writer: &kafka.Writer{
 			Addr:                   kafka.TCP(brokers...),

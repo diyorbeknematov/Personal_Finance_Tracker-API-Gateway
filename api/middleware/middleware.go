@@ -4,6 +4,7 @@ import (
 	"api-gateway/api/token"
 	"api-gateway/generated/user"
 	"context"
+	"fmt"
 	"log"
 	"log/slog"
 	"net/http"
@@ -27,7 +28,7 @@ func IsAuthenticated(auth user.AuthServiceClient) gin.HandlerFunc {
 			c.AbortWithStatusJSON(403, gin.H{"error": "Invalid access token"})
 			return
 		}
-
+		log.Println(resp.Valid, "Access token is valid")
 		if !resp.Valid {
 			c.AbortWithStatusJSON(403, gin.H{"error": "Invalid access token"})
 			return
@@ -56,8 +57,11 @@ func IsAuthorize(enforcer *casbin.Enforcer) gin.HandlerFunc {
 			return
 		}
 
+		log.Println(c.FullPath(), claim.GetRole(), c.Request.Method, "Authorization check")
 		// Enforce checks whether the role has access to the resource
 		ok, err := enforcer.Enforce(claim.GetRole(), c.FullPath(), c.Request.Method)
+		fmt.Println(c.FullPath(), claim.GetRole(), c.Request.Method, ok, err)
+		fmt.Println("Enforcer result: ", ok, " error: ", err)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Authorization error"})
 			return

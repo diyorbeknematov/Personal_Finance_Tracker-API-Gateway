@@ -29,7 +29,7 @@ type serviceManagerImpl struct {
 
 func NewServiceManager(cfg *config.Config) (ServiceManager, error) {
 	connBudget, err := grpc.NewClient(
-		fmt.Sprintf("localhost:%d", cfg.BUDGETING_SERVICE_PORT),
+		fmt.Sprintf("budgeting_app:%d", cfg.BUDGETING_SERVICE_PORT),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 
@@ -39,7 +39,7 @@ func NewServiceManager(cfg *config.Config) (ServiceManager, error) {
 	}
 
 	connUser, err := grpc.NewClient(
-		fmt.Sprintf("localhost:%d", cfg.USER_SERVICE_PORT),
+		fmt.Sprintf("auth_app:%d", cfg.USER_SERVICE_PORT),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {
