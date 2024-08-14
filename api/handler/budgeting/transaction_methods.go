@@ -214,8 +214,8 @@ func (h *budgettingHandlerImpl) DeleteTransactionHandler(ctx *gin.Context) {
 // @Tags transaction
 // @accept json
 // @produce json
-// @param Limit query int false "limit"
-// @param Offset query int false "offset"
+// @param Limit query int false "limit" default(10)
+// @param Paga query int false "offset" default(1)
 // @param AccountName query string false "Account name"
 // @param Amount query float64 false "Amount"
 // @param CategoryName query string false "Category name"

@@ -147,7 +147,8 @@ func (h *budgettingHandlerImpl) DeleteCategoryHandler(ctx *gin.Context) {
 // @accept json
 // @produce json
 // @Param Limit query int false "Limit" default(10)
-// @Param Offset query int false "Offset" default(1)
+// @Param Page query int false "Offset" default(1)
+// @Param UserId query string false "User ID"
 // @Param Name query string false "Name"
 // @Param Type query string false "Type" "type" (enum: [expence, income])
 // @Success 200 {object} budgeting.GetCategoriesResp

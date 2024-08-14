@@ -155,8 +155,9 @@ func (h *budgettingHandlerImpl) DeleteGoalHandler(ctx *gin.Context) {
 // @tags goal
 // @accept json
 // @produce json
-// @param PageNumber query int true "Page number"
-// @param PageSize query int true "Number of items per page"
+// @param Page query int false "Offset" default(1)
+// @param Limit query int false "Limit" default(10)
+// @param UserId query string false "Filter by user id"
 // @param Name query string false "Filter by name"
 // @param TargetAmount query float64 false "Filter by target amount"
 // @param Status query string false "Filter by status" "status" (enum: [achieved, Failed, Inporgress])

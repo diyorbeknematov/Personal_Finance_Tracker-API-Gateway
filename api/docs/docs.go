@@ -30,11 +30,54 @@ const docTemplate = `{
                 "summary": "get accounts list",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "offset",
+                        "name": "Offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "limit",
+                        "name": "Limit",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "user id",
                         "name": "UserId",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "Name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "currency",
+                        "name": "Currency",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "type",
+                        "name": "Type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "number",
+                        "description": "balance",
+                        "name": "Balance",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "created at",
+                        "name": "CreatedAt",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -290,6 +333,20 @@ const docTemplate = `{
                 "summary": "list budgets",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "page",
+                        "name": "Page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "limit",
+                        "name": "Limit",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "user id",
                         "name": "UserId",
@@ -297,14 +354,20 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "category id",
-                        "name": "CategoryId",
+                        "description": "category name",
+                        "name": "CategoryName",
                         "in": "query"
                     },
                     {
                         "type": "string",
                         "description": "period",
                         "name": "Period",
+                        "in": "query"
+                    },
+                    {
+                        "type": "number",
+                        "description": "amount",
+                        "name": "Amount",
                         "in": "query"
                     },
                     {
@@ -583,7 +646,13 @@ const docTemplate = `{
                         "type": "integer",
                         "default": 1,
                         "description": "Offset",
-                        "name": "Offset",
+                        "name": "Page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "UserId",
                         "in": "query"
                     },
                     {
@@ -795,17 +864,23 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Page number",
-                        "name": "PageNumber",
-                        "in": "query",
-                        "required": true
+                        "default": 1,
+                        "description": "Offset",
+                        "name": "Page",
+                        "in": "query"
                     },
                     {
                         "type": "integer",
-                        "description": "Number of items per page",
-                        "name": "PageSize",
-                        "in": "query",
-                        "required": true
+                        "default": 10,
+                        "description": "Limit",
+                        "name": "Limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by user id",
+                        "name": "UserId",
+                        "in": "query"
                     },
                     {
                         "type": "string",
@@ -1070,6 +1145,228 @@ const docTemplate = `{
                 }
             }
         },
+        "/reporting/budget-performance": {
+            "get": {
+                "description": "This endpoint will return the income report",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reporting"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "UserId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 2024,
+                        "description": "Year report",
+                        "name": "Year",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Monthly report",
+                        "name": "Month",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/budgeting.GetBudgetPerformanceResp"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/reporting/goal-progress": {
+            "get": {
+                "description": "This endpoint will return the goal progress report",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reporting"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "UserId",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/budgeting.GetGoalProgressResp"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/reporting/income": {
+            "get": {
+                "description": "This endpoint will return the income report",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reporting"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "UserId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Yearly report",
+                        "name": "Yearly",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Monthly report",
+                        "name": "Monthly",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/budgeting.GetIncomeReportResp"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/reporting/sepending": {
+            "get": {
+                "description": "This endpoint will return the sepending report",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reporting"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "UserId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Yearly report",
+                        "name": "Yearly",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Monthly report",
+                        "name": "Monthly",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/budgeting.GetSependingResp"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/transactions": {
             "get": {
                 "description": "get transactions list",
@@ -1086,14 +1383,16 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
+                        "default": 10,
                         "description": "limit",
                         "name": "Limit",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "default": 1,
                         "description": "offset",
-                        "name": "Offset",
+                        "name": "Paga",
                         "in": "query"
                     },
                     {
@@ -1656,6 +1955,23 @@ const docTemplate = `{
                 }
             }
         },
+        "budgeting.BudgetPerformance": {
+            "type": "object",
+            "properties": {
+                "actual": {
+                    "type": "number"
+                },
+                "category_id": {
+                    "type": "string"
+                },
+                "progress": {
+                    "type": "number"
+                },
+                "target": {
+                    "type": "number"
+                }
+            }
+        },
         "budgeting.Category": {
             "type": "object",
             "properties": {
@@ -1924,6 +2240,26 @@ const docTemplate = `{
                 }
             }
         },
+        "budgeting.GetBudgetPerformanceResp": {
+            "type": "object",
+            "properties": {
+                "budget_performance_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/budgeting.BudgetPerformance"
+                    }
+                },
+                "month": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "string"
+                },
+                "year": {
+                    "type": "integer"
+                }
+            }
+        },
         "budgeting.GetBudgetResp": {
             "type": "object",
             "properties": {
@@ -2007,6 +2343,17 @@ const docTemplate = `{
                 }
             }
         },
+        "budgeting.GetGoalProgressResp": {
+            "type": "object",
+            "properties": {
+                "goal_progress": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/budgeting.GoalProgress"
+                    }
+                }
+            }
+        },
         "budgeting.GetGoalResp": {
             "type": "object",
             "properties": {
@@ -2050,6 +2397,34 @@ const docTemplate = `{
                 },
                 "total_count": {
                     "type": "integer"
+                }
+            }
+        },
+        "budgeting.GetIncomeReportResp": {
+            "type": "object",
+            "properties": {
+                "monthly": {
+                    "type": "boolean"
+                },
+                "user_id": {
+                    "type": "string"
+                },
+                "yearly": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "budgeting.GetSependingResp": {
+            "type": "object",
+            "properties": {
+                "monthly": {
+                    "type": "boolean"
+                },
+                "total_amount": {
+                    "type": "number"
+                },
+                "yearly": {
+                    "type": "boolean"
                 }
             }
         },
@@ -2125,6 +2500,26 @@ const docTemplate = `{
                 },
                 "user_id": {
                     "type": "string"
+                }
+            }
+        },
+        "budgeting.GoalProgress": {
+            "type": "object",
+            "properties": {
+                "current_amount": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "progress": {
+                    "type": "number"
+                },
+                "target_amount": {
+                    "type": "number"
                 }
             }
         },

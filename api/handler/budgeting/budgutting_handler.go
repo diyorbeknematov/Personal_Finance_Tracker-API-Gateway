@@ -43,22 +43,30 @@ type BudgettingHandler interface {
 	DeleteTransactionHandler(ctx *gin.Context)
 	GetTransactionsListHandler(ctx *gin.Context)
 	GetTransactionHandler(ctx *gin.Context)
+
+	// Reporting
+	GetSependingReportHandler(ctx *gin.Context)
+	GetBudgetPerformanceHandler(ctx *gin.Context)
+	GetGoalProgressHandler(ctx *gin.Context)
+	GetIncomeReportHandler(ctx *gin.Context)
 }
 
 type budgettingHandlerImpl struct {
-	financeManagement budgeting.FinanceManagementServiceClient
-	budgetManagement  budgeting.BudgetingServiceClient
-	goalsManagement   budgeting.GoalsManagemenServiceClient
-	producer          producer.KafkaProducer
-	logger            *slog.Logger
+	financeManagement   budgeting.FinanceManagementServiceClient
+	budgetManagement    budgeting.BudgetingServiceClient
+	goalsManagement     budgeting.GoalsManagemenServiceClient
+	reportingManagement budgeting.ReportingNotificationServiceClient
+	producer            producer.KafkaProducer
+	logger              *slog.Logger
 }
 
 func NewBudgettingHandler(serviceManger service.ServiceManager, logger *slog.Logger, producer producer.KafkaProducer) BudgettingHandler {
 	return &budgettingHandlerImpl{
-		financeManagement: serviceManger.FinanceManagement(),
-		budgetManagement:  serviceManger.BudgetManagement(),
-		goalsManagement:   serviceManger.GoalsManagement(),
-		producer:          producer,
-		logger:            logger,
+		financeManagement:   serviceManger.FinanceManagement(),
+		budgetManagement:    serviceManger.BudgetManagement(),
+		goalsManagement:     serviceManger.GoalsManagement(),
+		reportingManagement: serviceManger.ReportingManagement(),
+		producer:            producer,
+		logger:              logger,
 	}
 }

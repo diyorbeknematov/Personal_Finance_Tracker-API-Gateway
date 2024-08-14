@@ -182,9 +182,12 @@ func (h *budgettingHandlerImpl) DeleteBudgetHandler(ctx *gin.Context) {
 // @Tags budget
 // @Accept json
 // @Produce json
+// @Param Page query int false "page" default(1)
+// @Param Limit query int false "limit" default(10)
 // @Param UserId query string false "user id"
-// @Param CategoryId query string false "category id"
+// @Param CategoryName query string false "category name"
 // @Param Period query string false "period" (enum: day, week, month, year)
+// @Param Amount query float64 false "amount"
 // @Param StartDate query string false "start date"
 // @Param EndDate query string false "end date"
 // @Success 200 {object} budgeting.GetBudgetsResp

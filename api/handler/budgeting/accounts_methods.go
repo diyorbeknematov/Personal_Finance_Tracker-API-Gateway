@@ -192,7 +192,14 @@ func (h *budgettingHandlerImpl) DeleteAccountHandler(ctx *gin.Context) {
 // @tags account
 // @Accept json
 // @produce json
-// @param UserId query string true "user id"
+// @param Offset query int false "offset" default(1)
+// @param Limit query int false "limit" default(10)
+// @param UserId query string false "user id"
+// @param Name query string false "name"
+// @param Currency query string false "currency"
+// @param Type query string false "type"
+// @param Balance query float64 false "balance"
+// @param CreatedAt query bool false "created at"
 // @Success 200 {object} budgeting.GetAccountsListResp
 // @Failure 404 {object} map[string]interface{}
 // @Failure 400 {object} models.ErrorResponse

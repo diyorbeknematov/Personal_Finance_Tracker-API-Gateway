@@ -15,14 +15,16 @@ type ServiceManager interface {
 	FinanceManagement() budgeting.FinanceManagementServiceClient
 	BudgetManagement() budgeting.BudgetingServiceClient
 	GoalsManagement() budgeting.GoalsManagemenServiceClient
+	ReportingManagement() budgeting.ReportingNotificationServiceClient
 	User() user.AuthServiceClient
 }
 
 type serviceManagerImpl struct {
-	financeManagement budgeting.FinanceManagementServiceClient
-	budgetManagement  budgeting.BudgetingServiceClient
-	goalsManagement   budgeting.GoalsManagemenServiceClient
-	user              user.AuthServiceClient
+	financeManagement   budgeting.FinanceManagementServiceClient
+	budgetManagement    budgeting.BudgetingServiceClient
+	goalsManagement     budgeting.GoalsManagemenServiceClient
+	reportingManagement budgeting.ReportingNotificationServiceClient
+	user                user.AuthServiceClient
 }
 
 func NewServiceManager(cfg *config.Config) (ServiceManager, error) {
@@ -35,7 +37,7 @@ func NewServiceManager(cfg *config.Config) (ServiceManager, error) {
 		log.Println("error connecting to gRPC server: ", err)
 		return nil, err
 	}
-	
+
 	connUser, err := grpc.NewClient(
 		fmt.Sprintf("localhost:%d", cfg.USER_SERVICE_PORT),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
@@ -46,10 +48,11 @@ func NewServiceManager(cfg *config.Config) (ServiceManager, error) {
 	}
 
 	return &serviceManagerImpl{
-		financeManagement: budgeting.NewFinanceManagementServiceClient(connBudget),
-		budgetManagement:  budgeting.NewBudgetingServiceClient(connBudget),
-		goalsManagement:   budgeting.NewGoalsManagemenServiceClient(connBudget),
-		user:              user.NewAuthServiceClient(connUser),
+		financeManagement:   budgeting.NewFinanceManagementServiceClient(connBudget),
+		budgetManagement:    budgeting.NewBudgetingServiceClient(connBudget),
+		goalsManagement:     budgeting.NewGoalsManagemenServiceClient(connBudget),
+		reportingManagement: budgeting.NewReportingNotificationServiceClient(connBudget),
+		user:                user.NewAuthServiceClient(connUser),
 	}, nil
 }
 
@@ -63,6 +66,10 @@ func (s *serviceManagerImpl) BudgetManagement() budgeting.BudgetingServiceClient
 
 func (s *serviceManagerImpl) GoalsManagement() budgeting.GoalsManagemenServiceClient {
 	return s.goalsManagement
+}
+
+func (s *serviceManagerImpl) ReportingManagement() budgeting.ReportingNotificationServiceClient {
+	return s.reportingManagement
 }
 
 func (s *serviceManagerImpl) User() user.AuthServiceClient {

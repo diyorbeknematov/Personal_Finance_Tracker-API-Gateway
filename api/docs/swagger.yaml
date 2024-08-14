@@ -32,6 +32,17 @@ definitions:
       user_id:
         type: string
     type: object
+  budgeting.BudgetPerformance:
+    properties:
+      actual:
+        type: number
+      category_id:
+        type: string
+      progress:
+        type: number
+      target:
+        type: number
+    type: object
   budgeting.Category:
     properties:
       id:
@@ -205,6 +216,19 @@ definitions:
       total_count:
         type: integer
     type: object
+  budgeting.GetBudgetPerformanceResp:
+    properties:
+      budget_performance_list:
+        items:
+          $ref: '#/definitions/budgeting.BudgetPerformance'
+        type: array
+      month:
+        type: integer
+      user_id:
+        type: string
+      year:
+        type: integer
+    type: object
   budgeting.GetBudgetResp:
     properties:
       amount:
@@ -259,6 +283,13 @@ definitions:
       user_id:
         type: string
     type: object
+  budgeting.GetGoalProgressResp:
+    properties:
+      goal_progress:
+        items:
+          $ref: '#/definitions/budgeting.GoalProgress'
+        type: array
+    type: object
   budgeting.GetGoalResp:
     properties:
       current_amount:
@@ -288,6 +319,24 @@ definitions:
         type: integer
       total_count:
         type: integer
+    type: object
+  budgeting.GetIncomeReportResp:
+    properties:
+      monthly:
+        type: boolean
+      user_id:
+        type: string
+      yearly:
+        type: boolean
+    type: object
+  budgeting.GetSependingResp:
+    properties:
+      monthly:
+        type: boolean
+      total_amount:
+        type: number
+      yearly:
+        type: boolean
     type: object
   budgeting.GetTransactionResp:
     properties:
@@ -337,6 +386,19 @@ definitions:
         type: number
       user_id:
         type: string
+    type: object
+  budgeting.GoalProgress:
+    properties:
+      current_amount:
+        type: number
+      id:
+        type: string
+      name:
+        type: string
+      progress:
+        type: number
+      target_amount:
+        type: number
     type: object
   budgeting.Transaction:
     properties:
@@ -522,11 +584,40 @@ paths:
       - application/json
       description: get accounts list
       parameters:
+      - default: 1
+        description: offset
+        in: query
+        name: Offset
+        type: integer
+      - default: 10
+        description: limit
+        in: query
+        name: Limit
+        type: integer
       - description: user id
         in: query
         name: UserId
-        required: true
         type: string
+      - description: name
+        in: query
+        name: Name
+        type: string
+      - description: currency
+        in: query
+        name: Currency
+        type: string
+      - description: type
+        in: query
+        name: Type
+        type: string
+      - description: balance
+        in: query
+        name: Balance
+        type: number
+      - description: created at
+        in: query
+        name: CreatedAt
+        type: boolean
       produces:
       - application/json
       responses:
@@ -696,18 +787,32 @@ paths:
       - application/json
       description: list budgets
       parameters:
+      - default: 1
+        description: page
+        in: query
+        name: Page
+        type: integer
+      - default: 10
+        description: limit
+        in: query
+        name: Limit
+        type: integer
       - description: user id
         in: query
         name: UserId
         type: string
-      - description: category id
+      - description: category name
         in: query
-        name: CategoryId
+        name: CategoryName
         type: string
       - description: period
         in: query
         name: Period
         type: string
+      - description: amount
+        in: query
+        name: Amount
+        type: number
       - description: start date
         in: query
         name: StartDate
@@ -893,8 +998,12 @@ paths:
       - default: 1
         description: Offset
         in: query
-        name: Offset
+        name: Page
         type: integer
+      - description: User ID
+        in: query
+        name: UserId
+        type: string
       - description: Name
         in: query
         name: Name
@@ -1033,16 +1142,20 @@ paths:
       - application/json
       description: Gets all goals
       parameters:
-      - description: Page number
+      - default: 1
+        description: Offset
         in: query
-        name: PageNumber
-        required: true
+        name: Page
         type: integer
-      - description: Number of items per page
+      - default: 10
+        description: Limit
         in: query
-        name: PageSize
-        required: true
+        name: Limit
         type: integer
+      - description: Filter by user id
+        in: query
+        name: UserId
+        type: string
       - description: Filter by name
         in: query
         name: Name
@@ -1222,19 +1335,167 @@ paths:
       summary: Update a goal
       tags:
       - goal
+  /reporting/budget-performance:
+    get:
+      description: This endpoint will return the income report
+      parameters:
+      - description: User ID
+        in: query
+        name: UserId
+        type: string
+      - default: 2024
+        description: Year report
+        in: query
+        name: Year
+        type: integer
+      - default: 1
+        description: Monthly report
+        in: query
+        name: Month
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.GetBudgetPerformanceResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      tags:
+      - reporting
+  /reporting/goal-progress:
+    get:
+      description: This endpoint will return the goal progress report
+      parameters:
+      - description: User ID
+        in: query
+        name: UserId
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.GetGoalProgressResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      tags:
+      - reporting
+  /reporting/income:
+    get:
+      description: This endpoint will return the income report
+      parameters:
+      - description: User ID
+        in: query
+        name: UserId
+        type: string
+      - description: Yearly report
+        in: query
+        name: Yearly
+        type: boolean
+      - description: Monthly report
+        in: query
+        name: Monthly
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.GetIncomeReportResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      tags:
+      - reporting
+  /reporting/sepending:
+    get:
+      description: This endpoint will return the sepending report
+      parameters:
+      - description: User ID
+        in: query
+        name: UserId
+        type: string
+      - description: Yearly report
+        in: query
+        name: Yearly
+        type: boolean
+      - description: Monthly report
+        in: query
+        name: Monthly
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.GetSependingResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      tags:
+      - reporting
   /transactions:
     get:
       consumes:
       - application/json
       description: get transactions list
       parameters:
-      - description: limit
+      - default: 10
+        description: limit
         in: query
         name: Limit
         type: integer
-      - description: offset
+      - default: 1
+        description: offset
         in: query
-        name: Offset
+        name: Paga
         type: integer
       - description: Account name
         in: query

@@ -117,4 +117,12 @@ func (c *controllerImpl) SetupRoutes(service service.ServiceManager, kafkaProduc
 		goal.DELETE("/:id", h.BudgetHandler().DeleteGoalHandler)
 		goal.GET("/", h.BudgetHandler().GetGoalsListHandler)
 	}
+
+	reporting := router.Group("/reporting")
+	{
+		reporting.GET("/sepending", h.BudgetHandler().GetSependingReportHandler)
+        reporting.GET("/income", h.BudgetHandler().GetIncomeReportHandler)
+        reporting.GET("/budget-performance", h.BudgetHandler().GetBudgetPerformanceHandler)
+        reporting.GET("/goal-progress", h.BudgetHandler().GetGoalProgressHandler)
+	}
 }
