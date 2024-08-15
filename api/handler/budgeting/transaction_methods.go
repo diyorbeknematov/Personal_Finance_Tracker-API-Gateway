@@ -82,30 +82,9 @@ func (h *budgettingHandlerImpl) CreateTransactionHandler(ctx *gin.Context) {
 // @failure 500 {object} models.ErrorResponse
 // @router /transactions/{id} [get]
 func (h *budgettingHandlerImpl) GetTransactionHandler(ctx *gin.Context) {
-	val, exists := ctx.Get("claims")
-	if !exists {
-		h.logger.Error("Missing token claims")
-		ctx.JSON(400, models.ErrorResponse{
-			Status:  400,
-			Message: "Missing token claims",
-			Error:   "Missing token claims",
-		})
-		return
-	}
-	claims, err := token.TokenClaimsParse(val)
-	if err != nil {
-		ctx.JSON(400, models.ErrorResponse{
-			Status:  400,
-			Message: "Invalid access token",
-			Error:   err.Error(),
-		})
-		return
-	}
-
 	id := ctx.Param("id")
 	transaction, err := h.financeManagement.GetTransaction(ctx, &pb.GetTransactionReq{
 		Id:     id,
-		UserId: claims.Id,
 	})
 	if err != nil {
 		h.logger.Error("Internal Server Error", "error", err)

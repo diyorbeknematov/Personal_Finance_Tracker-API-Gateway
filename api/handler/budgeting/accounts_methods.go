@@ -57,31 +57,9 @@ func (h *budgettingHandlerImpl) CreateAccountHandler(ctx *gin.Context) {
 // @Failure 500 {object} models.ErrorResponse
 // @Router /accounts/{id} [get]
 func (h *budgettingHandlerImpl) GetAccountHandler(ctx *gin.Context) {
-	val, exists := ctx.Get("claims")
-	if !exists {
-		h.logger.Error("Missing token claims")
-		ctx.JSON(400, models.ErrorResponse{
-			Status:  400,
-			Message: "Missing token claims",
-			Error:   "Missing token claims",
-		})
-		return
-	}
-	claims, err := token.TokenClaimsParse(val)
-	if err != nil {
-		h.logger.Error("Invalid access token", "error", err)
-		ctx.AbortWithStatusJSON(403, models.ErrorResponse{
-			Status:  403,
-			Message: "Invalid access token",
-			Error:   err.Error(),
-		})
-		return
-	}
-
 	id := ctx.Param("id")
 	account, err := h.financeManagement.GetAccount(ctx, &pb.GetAccountReq{
 		Id:     id,
-		UserId: claims.GetId(),
 	})
 	if err != nil {
 		h.logger.Error("Internal Server Error", "error", err)

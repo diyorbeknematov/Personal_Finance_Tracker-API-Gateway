@@ -67,7 +67,7 @@ func (c *controllerImpl) SetupRoutes(service service.ServiceManager, kafkaProduc
 	// User routes
 
 	user := router.Group("/users")
-	user.Use(middleware.IsAuthenticated(service.User()))
+	user.Use(middleware.IsAuthenticated(service.User()), middleware.LogMiddleware(logger))
 	user.Use(middleware.IsAuthorize(enforcer))
 
 	{
@@ -78,7 +78,7 @@ func (c *controllerImpl) SetupRoutes(service service.ServiceManager, kafkaProduc
 	}
 
 	account := router.Group("/accounts")
-	account.Use(middleware.IsAuthenticated(service.User()))
+	account.Use(middleware.IsAuthenticated(service.User()), middleware.LogMiddleware(logger))
 	account.Use(middleware.IsAuthorize(enforcer))
 	{
 		account.POST("/", h.BudgetHandler().CreateAccountHandler)
@@ -89,7 +89,7 @@ func (c *controllerImpl) SetupRoutes(service service.ServiceManager, kafkaProduc
 	}
 
 	budget := router.Group("/budgets")
-	budget.Use(middleware.IsAuthenticated(service.User()))
+	budget.Use(middleware.IsAuthenticated(service.User()), middleware.LogMiddleware(logger))
 	budget.Use(middleware.IsAuthorize(enforcer))
 	{
 		budget.POST("/", h.BudgetHandler().CreateBudgetHandler)
@@ -100,7 +100,7 @@ func (c *controllerImpl) SetupRoutes(service service.ServiceManager, kafkaProduc
 	}
 
 	category := router.Group("/categories")
-	category.Use(middleware.IsAuthenticated(service.User()))
+	category.Use(middleware.IsAuthenticated(service.User()), middleware.LogMiddleware(logger))
 	category.Use(middleware.IsAuthorize(enforcer))
 	{
 		category.POST("/", h.BudgetHandler().CreateCategoryHandler)
@@ -111,7 +111,7 @@ func (c *controllerImpl) SetupRoutes(service service.ServiceManager, kafkaProduc
 	}
 
 	transaction := router.Group("/transactions")
-	transaction.Use(middleware.IsAuthenticated(service.User()))
+	transaction.Use(middleware.IsAuthenticated(service.User()), middleware.LogMiddleware(logger))
 	transaction.Use(middleware.IsAuthorize(enforcer))
 	{
 		transaction.POST("/", h.BudgetHandler().CreateTransactionHandler)
@@ -122,7 +122,7 @@ func (c *controllerImpl) SetupRoutes(service service.ServiceManager, kafkaProduc
 	}
 
 	goal := router.Group("/goals")
-	goal.Use(middleware.IsAuthenticated(service.User()))
+	goal.Use(middleware.IsAuthenticated(service.User()), middleware.LogMiddleware(logger))
 	goal.Use(middleware.IsAuthorize(enforcer))
 	{
 		goal.POST("/", h.BudgetHandler().CreateGoalsHandler)
@@ -133,7 +133,7 @@ func (c *controllerImpl) SetupRoutes(service service.ServiceManager, kafkaProduc
 	}
 
 	reporting := router.Group("/reporting")
-	reporting.Use(middleware.IsAuthenticated(service.User()))
+	reporting.Use(middleware.IsAuthenticated(service.User()), middleware.LogMiddleware(logger))
 	reporting.Use(middleware.IsAuthorize(enforcer))
 	{
 		reporting.GET("/sepending", h.BudgetHandler().GetSependingReportHandler)
@@ -143,13 +143,13 @@ func (c *controllerImpl) SetupRoutes(service service.ServiceManager, kafkaProduc
 	}
 
 	notification := router.Group("/notification")
-	notification.Use(middleware.IsAuthenticated(service.User()))
+	notification.Use(middleware.IsAuthenticated(service.User()), middleware.LogMiddleware(logger))
 	notification.Use(middleware.IsAuthorize(enforcer))
 	{
-		notification.POST("/", h.BudgetHandler().SendNotificationHandler)
-		notification.GET("/", h.BudgetHandler().GetNotificationListHandler)
+		notification.POST("/send", h.BudgetHandler().SendNotificationHandler)
+		notification.GET("/list", h.BudgetHandler().GetNotificationListHandler)
 		notification.GET("/:id", h.BudgetHandler().GetNotificationHandler)
-		notification.PUT("/:id/read", h.BudgetHandler().UpdateNotificationHandler)
+		notification.PUT("/:id/", h.BudgetHandler().UpdateNotificationHandler)
 		notification.DELETE("/:id", h.BudgetHandler().DeleteNotificationHandler)
 	}
 }

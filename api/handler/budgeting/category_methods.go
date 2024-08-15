@@ -70,7 +70,18 @@ func (h *budgettingHandlerImpl) GetCategoryHandler(ctx *gin.Context) {
     ctx.JSON(200, resp)
 }
 
-
+// @summary Update a category
+// @description Updates a category
+// @tags category
+// @accept json
+// @produce json
+// @param id path string true "Category ID"
+// @param category body budgeting.UpdateCategoryReq true "Updated category"
+// @success 200 {object} budgeting.UpdateCategoryResp
+// @failure 404 {object} map[string]interface{}
+// @failure 400 {object} models.ErrorResponse
+// @failure 500 {object} models.ErrorResponse
+// @router /categories/{id} [put]
 func (h *budgettingHandlerImpl) UpdateCategoryHandler(ctx *gin.Context) {
 	var category pb.UpdateCategoryReq
     if err := ctx.ShouldBindJSON(&category); err!= nil {

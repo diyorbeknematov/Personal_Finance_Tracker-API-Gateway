@@ -52,16 +52,66 @@ func CasbinEnforcer() (*casbin.Enforcer, error) {
 	}
 
 	policies := [][]string{
+		{"admin", "/api/v1/users/profile", "GET"},
+		{"admin", "/api/v1/users/profile", "PUT"},
+		{"admin", "/api/v1/users/password", "PUT"},
+		{"admin", "/api/v1/users/", "GET"},
+
+		{"admin", "/api/v1/accounts/:id", "GET"},
+		{"admin", "/api/v1/accounts/", "POST"},
+		{"admin", "/api/v1/accounts/:id", "PUT"},
+		{"admin", "/api/v1/accounts/:id", "DELETE"},
+		{"admin", "/api/v1/accounts/", "GET"},
+
+		{"admin", "/api/v1/budgets/", "POST"},
+		{"admin", "/api/v1/budgets/:id", "GET"},
+		{"admin", "/api/v1/budgets/:id", "PUT"},
+		{"admin", "/api/v1/budgets/:id", "DELETE"},
+		{"admin", "/api/v1/budgets/", "GET"},
+
+		{"admin", "/api/v1/categories/", "POST"},
+		{"admin", "/api/v1/categories/:id", "PUT"},
+		{"admin", "/api/v1/categories/:id", "DELETE"},
+		{"admin", "/api/v1/categories/", "GET"},
+		{"admin", "/api/v1/categories/:id", "GET"},
+
+		{"admin", "/api/v1/transactions/", "POST"},
+		{"admin", "/api/v1/transactions/:id", "GET"},
+		{"admin", "/api/v1/transactions/:id", "PUT"},
+		{"admin", "/api/v1/transactions/:id", "DELETE"},
+		{"admin", "/api/v1/transactions/", "GET"},
+
+		{"admin", "/api/v1/goals/", "POST"},
+		{"admin", "/api/v1/goals/:id", "GET"},
+		{"admin", "/api/v1/goals/:id", "PUT"},
+		{"admin", "/api/v1/goals/:id", "DELETE"},
+		{"admin", "/api/v1/goals/", "GET"},
+
+		{"admin", "/api/v1/reporting/spending", "GET"},
+		{"admin", "/api/v1/reporting/income", "GET"},
+		{"admin", "/api/v1/reporting/budget-performance", "GET"},
+		{"admin", "/api/v1/reporting/goal-progress", "GET"},
+
+		{"admin", "/api/v1/notification/send", "POST"},
+		{"admin", "/api/v1/notification/list", "GET"},
+		{"admin", "/api/v1/notification/:id", "GET"},
+		{"admin", "/api/v1/notification/:id/read", "PUT"},
+		{"admin", "/api/v1/notification/:id", "DELETE"},
+
 		{"user", "/api/v1/users/profile", "GET"},
 		{"user", "/api/v1/users/profile", "PUT"},
 		{"user", "/api/v1/users/password", "PUT"},
-		{"user", "/api/v1/users/", "GET"},
 
+		{"user", "/api/v1/accounts/", "POST"},
 		{"user", "/api/v1/accounts/:id", "GET"},
+		{"user", "/api/v1/accounts/:id", "PUT"},
+		{"user", "/api/v1/accounts/:id", "DELETE"},
 		{"user", "/api/v1/accounts/", "GET"},
 
+		{"user", "/api/v1/budgets/", "POST"},
 		{"user", "/api/v1/budgets/:id", "GET"},
-		{"user", "/api/v1/budgets/", "GET"},
+		{"user", "/api/v1/budgets/:id", "PUT"},
+		{"user", "/api/v1/budgets/:id", "DELETE"},
 
 		{"user", "/api/v1/categories/:id", "GET"},
 		{"user", "/api/v1/categories/", "GET"},
@@ -83,10 +133,9 @@ func CasbinEnforcer() (*casbin.Enforcer, error) {
 		{"user", "/api/v1/reporting/budget-performance", "GET"},
 		{"user", "/api/v1/reporting/goal-progress", "GET"},
 
-		{"user", "/api/v1/notification/", "POST"},
 		{"user", "/api/v1/notification/", "GET"},
 		{"user", "/api/v1/notification/:id", "GET"},
-		{"user", "/api/v1/notification/:id/read", "PUT"},
+		{"user", "/api/v1/notification/:id/", "PUT"},
 	}
 
 	// Policy'larni qo'shish

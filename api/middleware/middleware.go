@@ -47,13 +47,19 @@ func IsAuthorize(enforcer *casbin.Enforcer) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		claims, exists := c.Get("claims")
 		if !exists {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Missing token claims"})
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"error": "Missing token claims",
+			})
+			c.Abort()
 			return
 		}
 
 		claim, err := token.TokenClaimsParse(claims)
 		if err != nil {
-			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": err.Error()})
+			c.JSON(http.StatusForbidden, gin.H{
+				"error": err.Error(),
+			})
+			c.Abort()
 			return
 		}
 
@@ -63,15 +69,20 @@ func IsAuthorize(enforcer *casbin.Enforcer) gin.HandlerFunc {
 		fmt.Println(c.FullPath(), claim.GetRole(), c.Request.Method, ok, err)
 		fmt.Println("Enforcer result: ", ok, " error: ", err)
 		if err != nil {
-			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Authorization error"})
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": "Authorization error",
+			})
+			c.Abort()
 			return
 		}
 
 		if !ok {
-			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "Insufficient permissions"})
+			c.JSON(http.StatusForbidden, gin.H{
+				"error": "Sizda bu amalni bajarish uchun ruxsat yo'q.",
+			})
+			c.Abort()
 			return
 		}
-
 		c.Next()
 	}
 }

@@ -1,7 +1,6 @@
 package bhandler
 
 import (
-	"api-gateway/api/token"
 	pb "api-gateway/generated/budgeting"
 	"api-gateway/models"
 
@@ -54,28 +53,8 @@ func (h *budgettingHandlerImpl) CreateGoalsHandler(ctx *gin.Context) {
 // @failure 500 {object} models.ErrorResponse
 // @router /goals/{id} [get]
 func (h *budgettingHandlerImpl) GetGoalHandler(ctx *gin.Context) {
-	val, exists := ctx.Get("claims")
-	if !exists {
-		h.logger.Error("Missing token claims")
-		ctx.JSON(400, models.ErrorResponse{
-			Status:  400,
-			Message: "Missing token claims",
-			Error:   "Missing token claims",
-		})
-		return
-	}
-	claims, err := token.TokenClaimsParse(val)
-	if err != nil {
-		ctx.JSON(403, models.ErrorResponse{
-			Status:  403,
-			Message: "Invalid access token",
-			Error:   err.Error(),
-		})
-		return
-	}
-
 	id := ctx.Param("id")
-	resp, err := h.goalsManagement.GetGoal(ctx, &pb.GetGoalReq{Id: id, UserId: claims.GetId()})
+	resp, err := h.goalsManagement.GetGoal(ctx, &pb.GetGoalReq{Id: id})
 	if err != nil {
 		ctx.JSON(500, models.ErrorResponse{
 			Status:  500,

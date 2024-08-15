@@ -455,13 +455,6 @@ definitions:
       user_id:
         type: string
     type: object
-  budgeting.SendNotificationResp:
-    properties:
-      message:
-        type: string
-      status:
-        type: string
-    type: object
   budgeting.Transaction:
     properties:
       account_id:
@@ -516,6 +509,22 @@ definitions:
       period:
         type: string
       start_date:
+        type: string
+    type: object
+  budgeting.UpdateCategoryReq:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+    type: object
+  budgeting.UpdateCategoryResp:
+    properties:
+      message:
+        type: string
+      status:
         type: string
     type: object
   budgeting.UpdateGoalReq:
@@ -1212,6 +1221,45 @@ paths:
       summary: Get a category by id
       tags:
       - category
+    put:
+      consumes:
+      - application/json
+      description: Updates a category
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated category
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/budgeting.UpdateCategoryReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.UpdateCategoryResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Update a category
+      tags:
+      - category
   /goals:
     get:
       consumes:
@@ -1515,6 +1563,69 @@ paths:
           schema:
             $ref: '#/definitions/models.ErrorResponse'
       summary: Update notification
+      tags:
+      - notification
+  /notification/list:
+    get:
+      consumes:
+      - application/json
+      description: Get notification list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/budgeting.GetNotificationsListResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get notification list
+      tags:
+      - notification
+  /notification/send:
+    post:
+      consumes:
+      - application/json
+      description: Send notification to a user
+      parameters:
+      - description: Send notification request
+        in: body
+        name: sendNotificationReq
+        required: true
+        schema:
+          $ref: '#/definitions/budgeting.SendNotificationReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Send notification to a user
       tags:
       - notification
   /reporting/budget-performance:
