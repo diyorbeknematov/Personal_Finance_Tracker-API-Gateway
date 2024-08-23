@@ -74,7 +74,7 @@ services:
       postgres-db:
         condition: service_started
       kafka:
-        condition: server_healthy
+        condition: service_healthy
     ports:
       - 8080:9999
     networks:
