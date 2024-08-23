@@ -1,0 +1,46 @@
+name: api-gateway
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup go
+        uses:
+          actions/setup-go@v4
+        with:
+          go-version: '1.22.2'
+      
+      - name: Deployment
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.HOST}}
+          username: ${{secrets.USERNAME}}
+          key: ${{secrets.SSH_KEY}}
+          port: ${{secrets.PORT}}
+          script: 
+            cd personal_finance_tracker/api-gateway/
+            git pull origin main
+            sudo docker compose down
+            sudo docker compose up -d
+
+            cd ..
+            cd auth-service/
+            git pull origin main
+            sudo docker compose down
+            sudo docker compose up -d
+
+            cd ..
+            cd budgetting-service/
+            git pull origin main
+            sudo docker compose down
+            sudo docker compose up -d
