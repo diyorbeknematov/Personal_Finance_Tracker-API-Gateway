@@ -72,7 +72,7 @@ services:
     container_name: api_app
     depends_on:
       postgres-db:
-        condition: server_started
+        condition: service_started
       kafka:
         condition: server_healthy
     ports:
